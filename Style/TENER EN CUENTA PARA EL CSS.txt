@@ -1,0 +1,44 @@
+Color de fondo (background-color): #6fa363
+
+Color de texto: Negro
+
+Links: 
+	font-style: italic
+	font: 1em 'Segoe UI','Century Gothic'
+
+Links tipo Menú:
+	font: 1em 'Segoe UI','Century Gothic';
+	color: black;
+	font-style: italic;
+	font-weight: 400;
+	text-decoration:none;
+
+Texto cabecera:
+	font: 1.5em 'Segoe UI','Century Gothic';
+	color: black;
+	font-weight: 400;
+
+
+Todos los botones usan estos colores: (Incluso los de formulario)
+	background:#1b9752; (Color del botón)
+	color:white; (Color de Fuente)
+
+
+Efecto Hover para pequeña animación:
+
+:hover{
+	background:#044a23;
+	color:white;
+}
+
+Inputs de Búsqueda, Formularios y otros:
+
+	cursor: text !important;
+	border-radius: 2px;
+	border:none;
+	box-sizing: border-box !important;
+	box-shadow: none !important;
+	outline: none !important;
+	font-size: 15px !important;
+	font-family: "Open Sans", Helvetica, Arial, sans-serif;
+	color: #898989;

@@ -4,19 +4,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Manzana Isaac - Home</title>
+  <title>Manzana Isaac - Perfil por evento</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link rel="stylesheet" href="Style/style.css">
-  
 </head>
 
 <body id="body">
   <nav class="navbar navbar-dark bg-dark" >
-    <span class="text-white ms-1 d-none d-sm-inline" id="spanInfo"></span>
+    <span class="text-white ms-1 d-none d-sm-inline" id="spanInfo"> </span>
   </nav>
-   <!--div class="container"-->
-    
+     
      <!--div class="container"-->
     
      <div class="container-fluid">
@@ -112,22 +110,46 @@
                   
               </div>
           </div>
-
+          
     <div class="container col py-3">
       
-    <h1>Bienvenidos al modulo de ahorro Energetico</h1>
-    	
-<hr style="color:grey;" />
+    <h1>Administración de perfiles por evento</h1>
+    <hr style="color:grey;" />
+       
     <p></p>
     
-    <label for="exampleFormControlInput1" class="form-label">Al ahorrar energía contribuimos a interrumpir un ciclo de contaminación del medioambiente que ocurre de la siguiente manera: al usar menos energía usamos menos combustibles que generan dicha energía, al utilizar menos combustible, disminuye la emisión de gases a la atmósfera, al haber menos gases, se contamina menos.</label>
+    <label for="exampleFormControlInput1" class="form-label">Buscar perfil por planta</label>    
+    <select class="form-select" aria-label="Default select example" id="comboPlanta">            
+      <option value="-1">Todas </option>
+      <option value="0">Baja</option>
+      <option value="1">Primera</option>
+      <option value="2">Segunda</option>
+      <option value="3">Tercera</option>
+    </select>
+  
 
- <br>
-    
-    <!--div style="text-align:center;">
-      <img src="img/foco.png" width="30%" height="30%" alt="La Manzana de Isaac">
-    </div-->
+    <p></p>
 
+    <button type="button" class="btn btn-success"  id="but">Buscar</button>
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarPerfilEventoModal" style=>Agregar perfil por evento</button>
+
+    <p></p>
+    <hr style="color:grey;" />
+    <h2>Perfiles por evento</h2>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Activo</th>
+          <th scope="col">Horario inicial</th>
+          <th scope="col">Horario limite</th>          
+          <th scope="col">Planta</th>
+          <th scope="col">Sistema</th>
+          
+        </tr>
+      </thead>
+      <tbody class="table-group-divider" , id="tabla"></tbody>
 
   
     </div> <!--/div CONTAINER-->
@@ -136,10 +158,127 @@
 
 <!--MODALES -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-  crossorigin="anonymous"></script>
+  <!--Modal agregar perfil por evento/-->
+  <div class="modal fade" id="agregarPerfilEventoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar perfil por evento</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+          <!-- Ubicacion del piso/planta  -->
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">¿En qué planta desea?</label>
+            <select class="form-select" aria-label="Default select example" id="comboPlantaAgregar">            
+              <option value="0">Baja</option>
+              <option value="1">Primera</option>
+              <option value="2">Segunda</option>
+              <option value="3">Tercera</option>                        
+            </select>
+          </div>
+
+          <!--  Activado/Desactivado -->
+          <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">¿Cómo desea configurar el perfil para esa fecha?</label><br>
+              <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+              <label class="btn btn-outline-success" for="success-outlined">Activado</label>                
+              <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
+              <label class="btn btn-outline-danger" for="danger-outlined">Desactivado</label>
+          </div>
+
+          <!-- Fecha  -->
+          <div class="mb-3">              
+            <label for="recipient-name" class="col-form-label">¿Qué fecha desea programar el perfil?</label>
+            <input type="date" id="agregarFecha" name="trip-start" min="2022-08-01" max="2090-12-31">              
+          </div>
+
+          <!-- Horario  -->
+          <div class="mb-3">
+            <label for="appt-time">Horario inicial: </label>
+            <input type="time" name="appt-time" id="horaInicialAgregar"/>
+            <label for="appt-time">Horario limite: </label>
+            <input type="time" name="appt-time" id="horaLimiteAgregar"/>          
+          </div>
+
+
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="guardarPerfilEvento">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!------------------------------ MODAL EDITAR --------------------------------->
+
+  <div class="modal fade" id="ModalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar perfil por evento</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+
+          <!-- Ubicacion del piso/planta  -->
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">¿En qué planta desea?</label>
+            <select class="form-select" aria-label="Disabled select example" disabled id="editarPlanta">                
+              <option value="0">Baja</option>
+              <option value="1">Primera</option>
+              <option value="2">Segunda</option>
+              <option value="3">Tercera</option>                        
+            </select>
+          </div>
+
+          <!--  Activado/Desactivado -->
+          <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">¿Cómo desea configurar el perfil para esa fecha?</label><br>
+              <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>
+              <label class="btn btn-outline-success" for="success-outlined">Activado</label>                
+              <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">
+              <label class="btn btn-outline-danger" for="danger-outlined">Desactivado</label>
+          </div>
+
+          <!-- Fecha  -->
+          <div class="mb-3">              
+            <label for="recipient-name" class="col-form-label">¿Qué fecha desea programar el perfil?</label>
+            <input type="date" id="editarFecha" name="trip-start" min="2022-08-01" max="2090-12-31">              
+          </div>
+
+          <!-- Horario  -->
+          <div class="mb-3">
+            <label for="appt-time">Horario inicial: </label>
+            <input type="time" name="appt-time" id="horaInicialEditar"/>
+            <label for="appt-time">Horario limite: </label>
+            <input type="time" name="appt-time" id="horaLimiteEditar"/>          
+          </div>
+
+
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="editarPerfilEvento">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  
+
+  <script src="JS/perfilEvento.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
 </body>
-<script src="JS/home.js"></script>
+
 </html>

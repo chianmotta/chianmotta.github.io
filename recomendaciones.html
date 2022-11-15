@@ -4,22 +4,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Manzana Isaac - Home</title>
+  <title>Manzana Isaac - Recomendaciones</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link rel="stylesheet" href="Style/style.css">
-  
-</head>
+
+  </head>
+
 
 <body id="body">
   <nav class="navbar navbar-dark bg-dark" >
-    <span class="text-white ms-1 d-none d-sm-inline" id="spanInfo"></span>
+    <span class="text-white ms-1 d-none d-sm-inline" id="spanInfo"> </span>
   </nav>
-   <!--div class="container"-->
+    <!--div class="container"-->
     
-     <!--div class="container"-->
-    
-     <div class="container-fluid">
+    <div class="container-fluid">
       <div class=" row flex-nowrap">
           <div class=" container2 col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-succes rounded">
               <div class="d-flex flex-column align-items-center align-items-sm-start text-white px-3 pt-2 min-vh-90">
@@ -112,34 +111,109 @@
                   
               </div>
           </div>
-
+          
     <div class="container col py-3">
       
-    <h1>Bienvenidos al modulo de ahorro Energetico</h1>
-    	
-<hr style="color:grey;" />
-    <p></p>
     
-    <label for="exampleFormControlInput1" class="form-label">Al ahorrar energía contribuimos a interrumpir un ciclo de contaminación del medioambiente que ocurre de la siguiente manera: al usar menos energía usamos menos combustibles que generan dicha energía, al utilizar menos combustible, disminuye la emisión de gases a la atmósfera, al haber menos gases, se contamina menos.</label>
+    <h1>Recomendaciones</h1>
+    <hr style="color:grey;" />
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Tipo dispositivo</label>
 
- <br>
-    
-    <!--div style="text-align:center;">
-      <img src="img/foco.png" width="30%" height="30%" alt="La Manzana de Isaac">
-    </div-->
+      <select class="form-select" aria-label="Default select example" id="comboBoxDispositivo">
+        <option></option>
+      </select>
+
+    </div>
+    <button type="button" id="Buscar"  onclick="Buscar()"class="btn btn-success">Buscar</button>    
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal_2">
+      Agregar recomendación
+    </button>
+
+    <hr style="color:grey;" />
+
+    <div>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Tipo de dispositivo</th>
+            <th scope="col">Recomendación</th>
+            <th scope="col">Sistema</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider" , id="Registros">
+        </tbody>
+      </table>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar recomendación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label>Recomendación</label>
+        <br></br>
+        <div class="input-group mb-3">
+          <input type="text" id="InputRecomendacion" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" onclick="Modificar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+
+    <div class="modal fade" id="exampleModal_2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar recomendación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            
+      <p>Categoria de dispositivo</p>
+      <select class="form-select" aria-label="Default select example" id="ComboBoxNuevoDispositivo">
+        <option></option>
+      </select>
+      <br></br>
+      <p>Recomendación</p>
+
+      <div class="input-group mb-3">
+        <input type="text" id="InputNuevaRecomendacion" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+      </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" onclick="agregarRecomendacion()" class="btn btn-success">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-  
-    </div> <!--/div CONTAINER-->
-</div> <!--/div MENU-->
-</div>   <!--/div MENU-->
 
-<!--MODALES -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-  crossorigin="anonymous"></script>
 
-</body>
-<script src="JS/home.js"></script>
+
+
+
+
+
+
+  </body> 
+<script src="./package/dist/sweetalert2.js"></script>
+<script src="./package/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+  <script src="./JS/recomendacion.js"></script>
 </html>
