@@ -1,4 +1,5 @@
-var sql;
+var sql =
+  "http://localhost:4016/api/recomendacionAlumnos/recomendacionDisp/?institucion=la manzana de isaac ";
 var indice = document.getElementById("Registros");
 var ComboBoxDispositivo = document.getElementById("comboBoxDispositivo");
 
@@ -11,14 +12,11 @@ document.body.onload = () => {
     document.getElementById(
       "spanInfo"
     ).innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
-
+    Listar();
   } else {
     institucionGlobal = "La manzana de isaac";
-    
+    Listar();
   }
-  Listar();
-  sql =
-  "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion="+ institucionGlobal; 
 };
 
 async function Listar() {
@@ -37,6 +35,7 @@ async function Listar() {
                           `;
       }
     });
+
   BoxDispositivo();
 }
 async function RealizarRecomendacion() {
@@ -56,7 +55,7 @@ async function RealizarRecomendacion() {
       "comboBoxDispositivo"
     ).value;
     var url =
-      "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" +
+      "http://localhost:4001/api/descripciones/?descripcion=" +
       tipo_dispositivo_sugerencia;
     if (
       CondicionesDeAceptacionRecomendaciones(recomendacion_sugerencia) == false
@@ -75,7 +74,7 @@ async function RealizarRecomendacion() {
 
         JSONdata = JSON.stringify(NuevaRecomendacionAlumnoJSON);
         await fetch(
-          "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/",
+          "http://localhost:4016/api/recomendacionAlumnos/recomendacionDisp/",
           {
             method: "POST",
             headers: {
@@ -104,20 +103,18 @@ function ActualizarPagina() {
 }
 
 async function BoxDispositivo() {
-  var registroHTML = '<option value="0">----</option>';
-  await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones")
+  await fetch("http://localhost:4001/api/descripciones")
     .then((res) => res.json())
     .then(async (data) => {
       ComboBoxDispositivo.innerHTML = "";
       for (var i = 0; i < data.length; i++) {
         ComboBoxDispositivo.innerHTML +=
-          "<option>" + data[i].descripcion + "</option>";
-        registroHTML += `<option value=${data[i].id}>${data[i].descripcion}</option>`;
+          "<option>${data[i].descripcion}</option>";
+        document.getElementById("inputTipoDispositivo").innerHTML =
+          '<option value="0">---</option>' + registroHTML;
       }
-      document.getElementById("inputTipoDispositivo").innerHTML = registroHTML;
     });
 }
-
 function delay(n) {
   return new Promise(function (resolve) {
     setTimeout(resolve, n * 1000);
