@@ -41,7 +41,7 @@ async function AceptarDispositivoRoto(idDispositivo, NombreDispositivo){
 async function RechazarDispositivoRoto(id){  
   console.log(id);
 
-  await fetch("https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion=la%20manzana%20de%20isaac&id="+ id, {
+  await fetch("https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion="+ institucionGlobal + "&id=" + id, {
     method: 'DELETE'})
 
   Listar();
@@ -49,7 +49,7 @@ async function RechazarDispositivoRoto(id){
 
 async function Listar() {
   
-  await fetch("https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion="+ sessionStorage.getItem("institucion"))
+  await fetch("https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion="+ institucionGlobal)
     .then((res) => res.json())
     .then(async (data) => {
       indice.innerHTML = "";
