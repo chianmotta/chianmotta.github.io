@@ -302,7 +302,7 @@ async function cargarCombo() {
 
   var data;
   try{
-    res = await fetch("http://pp1-iot.herokuapp.com/api/areas/nombres")
+    res = await fetch("https://pp1-iot.herokuapp.com/api/areas/nombres")
     data = await res.json();
     zonasGlobales = data;
     cargarZonas(0, document.querySelector("#comboZona"));
