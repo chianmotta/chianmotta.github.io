@@ -15,10 +15,7 @@
     <span class="text-white ms-1 d-none d-sm-inline" id="spanInfo"> </span>
   </nav>
     <!--div class="container"-->
-    
-     <!--div class="container"-->
-    
-     <div class="container-fluid">
+    <div class="container-fluid">
       <div class=" row flex-nowrap">
           <div class=" container2 col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-succes rounded">
               <div class="d-flex flex-column align-items-center align-items-sm-start text-white px-3 pt-2 min-vh-90">
@@ -40,8 +37,7 @@
                           </a>                          
                           <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="dispositivo.html">Dispositivos</a></li>
-                            <li><a class="dropdown-item" href="descripcion.html">Categorias</a></li>                          
-                            <li><a class="dropdown-item" href="informesDispositivosRotos.html">Informe de dispositivos rotos</a></li>                          
+                            <li><a class="dropdown-item" href="descripcion.html">Categorias</a></li>                                                                              
                           </ul>                          
                         </li>
                       </ul>                           
@@ -68,15 +64,20 @@
                           <li><a class="dropdown-item" href="perfilEvento.html">Perfil por evento</a></li>
                         </ul>                          
                       </li>
-                    </ul>                  
+                    </ul>  
+                    <li class="nav-item">
+                      <a href="recomendaciones.html" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-house"></i> <span class="text-white ms-1 d-none d-sm-inline">Recomendaciones</span>
+                      </a>
+                    </li>                         
                     <ul class="navbar-nav dropend nav-link align-middle px-0">
                       <li class="nav-item dropdown btn-group dropend">                          
                         <a class="nav-link dropdown-toggle text-white ms-1 d-none d-sm-inline" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Recomendaciones
+                        Solicitudes
                         </a>                          
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="recomendaciones.html">Recomendaciones cargadas</a></li>
-                          <li><a class="dropdown-item" href="sugerenciasRealizadas.html">Sugerencias recibidas</a></li>                                                                        
+                          <li><a class="dropdown-item" href="informesDispositivosRotos.html">Informe de dispositivos rotos</a></li>  
+                          <li><a class="dropdown-item" href="sugerenciasRealizadas.html">Recomendaciones recibidas</a></li>                                                                        
                         </ul>                          
                       </li>
                     </ul>                                             
@@ -90,12 +91,7 @@
                             <li><a class="dropdown-item" href="metasHistoricas.html">Metas historicas</a></li>                          
                           </ul>                          
                         </li>
-                      </ul>                          
-                      <li class="nav-item">
-                        <a href="historialConsumo.html" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="text-white ms-1 d-none d-sm-inline">Historial de consumo</span>
-                        </a>
-                      </li>         
+                      </ul>                                                
                       <li class="nav-item">
                         <a href="notificaciones.html" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="text-white ms-1 d-none d-sm-inline">Notificaciones</span>
@@ -124,7 +120,7 @@
       <p></p>
     
       <button type="button" class="btn btn-success" id="but">Buscar</button>
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalAgregar"style=>Agregar tipo de dispositivo</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalAgregar"style=>Agregar categoría</button>
     
       <p></p>
       <hr style="color:grey;" />
@@ -132,13 +128,12 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Descripción</th>
+            <th scope="col">Categoria</th>
             <th scope="col">Sistema</th>
 
           </tr>
         </thead>
-        <tbody class="table-group-divider" , id="tabla"></tbody>
+        <tbody class="table-group" , id="tabla"></tbody>
       </table>
 
       <p></p>
@@ -153,14 +148,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="ModalAgregarLabel">Nueva descripcion</h1>
+        <h1 class="modal-title fs-5" id="ModalAgregarLabel">Nueva categoria</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
         <form>
           <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Descripcion:</label>
+            <label for="recipient-name" class="col-form-label">Categoria:</label>
             <input type="text" class="form-control" id="recipiente-agregar">
           </div>
         </form>
@@ -178,21 +173,21 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="ModalEditarLabel">Editar descripcion</h1>
+        <h1 class="modal-title fs-5" id="ModalEditarLabel">Editar Categoria</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 
         <form>
           <div class="mb-3">
-            <label for="recipient-editar" class="col-form-label">Descripcion:</label>
+            <label for="recipient-editar" class="col-form-label">Categoría:</label>
             <input type="text" class="form-control" id="recipiente-editar">
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="editarDescripcion">Editar</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="editarDescripcion">Editar</button>
       </div>
     </div>
   </div>

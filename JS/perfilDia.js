@@ -25,24 +25,17 @@ document.body.onload = () => {
   }
 }
 
-
-/*const callApi = () => {
-  
-  listar(dia, planta);
-};*/
-
 async function listar() {
   var dia = document.getElementById("comboDia").value;
   var planta = document.getElementById("comboPlanta").value;
-  
-  //console.log(planta);
+
   if(planta<0)
   {
-      var res = await fetch("http://localhost:4011/api/perfilxdia/get/?dia="+dia+"&institucion="+ institucionGlobal);  
+      var res = await fetch("https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/get/?dia="+dia+"&institucion="+ institucionGlobal);  
   }
   else
   { 
-      var res = await fetch("http://localhost:4011/api/perfilxdia/get/?dia="+dia+"&institucion="+ institucionGlobal+"&planta="+planta);
+      var res = await fetch("https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/get/?dia="+dia+"&institucion="+ institucionGlobal+"&planta="+planta);
   }
   var registroHTML = "";
   var data = await res.json();
@@ -51,7 +44,7 @@ async function listar() {
     var obj = data[i];
     //console.log(data[i]);
     registroHTML +=
-      `<tr class="table-success"><th scope="row">${i+1}</th> 
+      `<tr class="table-success">
           <td>${obj.dia}</td>           
            <td>${obj.horaDesde}</td> 
            <td>${obj.horaHasta}</td> 
@@ -66,7 +59,7 @@ async function listar() {
 async function eliminarPerfilDia(dia,planta) {
   console.log(planta);
   console.log(dia);
-  await fetch("http://localhost:4011/api/perfilxdia/?dia="+dia+"&planta="+planta+"&institucion="+institucionGlobal,{
+  await fetch("https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/?dia="+dia+"&planta="+planta+"&institucion="+institucionGlobal,{
     method: 'DELETE',
   })
   listar();
@@ -93,8 +86,10 @@ async function editarPerfilDia() {
 
   const editarHoraDesde=document.getElementById("editarHoraInicial").value;
   const editarHoraHasta=document.getElementById("editarHoraLimite").value;
-
-  await fetch("http://localhost:4011/api/perfilxdia/?dia="+editarDia+"&planta="+editarPlanta+"&institucion="+institucionGlobal,
+  if(editarHoraDesde>=editarHoraHasta){
+    alert("La hora inicio no debe ser mayor a la hora limite");
+  }else{
+  await fetch("https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/?dia="+editarDia+"&planta="+editarPlanta+"&institucion="+institucionGlobal,
  {
     method: 'PUT',
     headers: {
@@ -102,11 +97,11 @@ async function editarPerfilDia() {
     },
     body: JSON.stringify({ 
       "horaDesde":editarHoraDesde,
-      "horaHasta":editarHoraHasta          
-      
+      "horaHasta":editarHoraHasta,          
+      "fechaUltAccion": "0000-00-00"
      }),
   })
-  listar();
+  listar();}
 }
 
 async function agregarPerfilDia() {
@@ -115,22 +110,31 @@ async function agregarPerfilDia() {
   var horaInicial = document.getElementById("horaInicialAgregar").value;
   var horaLimite = document.getElementById("horaLimiteAgregar").value; 
 
-  const data = {
-    "dia": dia,
-    "horaDesde": horaInicial,
-    "horaHasta": horaLimite,
-    "planta": planta
-    
-  };
- 
-  await fetch("http://localhost:4011/api/perfilxdia/?institucion="+institucionGlobal, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  listar();
+  if(dia==undefined || dia=="" ||
+  planta==undefined || planta=="" ||
+  horaInicial==undefined || horaInicial=="" ||
+  horaLimite==undefined || horaLimite=="" ){
+    alert("Los campos no pueden estar vacios");
+  }else {
+    if(horaInicial>=horaLimite){
+      alert("La hora inicio no debe ser mayor a la hora limite");
+    }else{
+      const data = {
+        "dia": dia,
+        "horaDesde": horaInicial,
+        "horaHasta": horaLimite,
+        "planta": planta
+      };
+      await fetch("https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/?institucion="+institucionGlobal, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      listar();
+    }
+  }
 }
 
 apiButton.addEventListener("click", listar);

@@ -6,6 +6,8 @@ var editarPlanta;
 var editarActivado;
 var institucionGlobal;
 var usuarioGlobal;
+var botonActivadoAgregar;
+var botonActivadoEditar;
 var plantasGlobales;
 var categoriaGlobal;
 const jurisdiccion = "Ciudad Autonoma de Buenos Aires"; 
@@ -27,16 +29,11 @@ document.body.onload = () => {
 }
 
 
-/*const callApi = () => {
-  
-  listar(dia, planta);
-};*/
-
 async function listar() {
   
   var planta = document.getElementById("comboPlanta").value;
          
-    var res = await fetch("http://localhost:4012/api/eventos/get?&planta="+planta+"&institucion="+institucionGlobal);      
+    var res = await fetch("https://ahorro-energetico-api-pereven.herokuapp.com/api/eventos/get?&planta="+planta+"&institucion="+institucionGlobal);      
     var registroHTML = "";
     var data = await res.json();
 
@@ -45,24 +42,38 @@ async function listar() {
         var obj = data[i];        
         //console.log(data[i]);
         registroHTML +=
-          `<tr class="table-success"><th scope="row">${i+1}</th> 
-              <td>${obj.fecha}</td>           
-              <td>${obj.activado}</td>           
+          `<tr class="table-success">
+              <td>${format(obj.fecha)}</td>           
+              <td>${obj.activado==0 ? "Desactivado" : "Activado"}</td>           
               <td>${obj.horaDesde}</td> 
               <td>${obj.horaHasta}</td>           
               <td>${obj.planta}</td>          
-              <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.planta}","${obj.activado}","${obj.fecha}","${obj.horaDesde}","${obj.horaHasta}")'>Editar</button>
+              <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.planta}","${obj.fecha}","${obj.horaDesde}","${obj.horaHasta}","${obj.activado}")'>Editar</button>
               <button class="btn btn-danger" onclick='eliminarPerfilEvento("${obj.fecha}","${obj.planta}")'>Eliminar</button></td> </tr>`;
       }      
       document.querySelector("#tabla").innerHTML = registroHTML;
     
 }
+function activadoAgregar(num)
+{
+  botonActivadoAgregar=num;
+}
+function activadoEditar(num)
+{
+  pintarBoton(num);
+  botonActivadoEditar=num;
+}
+function pintarBoton(num)
+{
+  var botonA = num==0 ? "actE0" : "actE1";
+  document.getElementById(botonA).checked=true;
 
+}
 async function eliminarPerfilEvento(fecha,planta) {
-  //console.log(planta);
-  //console.log(fecha); 
-  //ESTA AGARRANDO MAL LA FECHA, TIENE DATOS BASURA
-  await fetch("http://localhost:4012/api/eventos?fecha="+fecha+"&planta="+planta+"&institucion="+institucionGlobal,{
+  
+  fecha=formatoInvertido(fecha);
+    
+  await fetch("https://ahorro-energetico-api-pereven.herokuapp.com/api/eventos?fecha="+fecha+"&planta="+planta+"&institucion="+institucionGlobal,{
     method: 'DELETE',
   })
   listar();
@@ -77,78 +88,89 @@ function cargarPlantas(select, combo) {
   combo.innerHTML = plantas;
 }
 
-function editar(planta,activado, fecha, horaDesde,horaHasta) {
-  editarFecha=document.getElementById("editarFecha").value = fecha;
+function editar(planta,fecha, horaDesde,horaHasta, activado) {
+  botonActivadoEditar=activado;
+  pintarBoton(activado);
   editarPlanta=document.getElementById("editarPlanta").value = planta;
-  //document.getElementById("editarActivado").value = activado; //HAY QUE AGARRAR BIEN ACA
-  document.getElementById("editarHoraInicial").value = horaDesde;
-  document.getElementById("editarHoraLimite").value = horaHasta;
-  
+  editarFecha=document.getElementById("editarFecha").value = formatoInvertido(fecha);
+  document.getElementById("horaInicialEditar").value = horaDesde;
+  document.getElementById("horaLimiteEditar").value = horaHasta;
 }
 
 async function editarPerfilEvento() {
-
-  const editarHoraDesde=document.getElementById("editarHoraInicial").value;
-  const editarHoraHasta=document.getElementById("editarHoraLimite").value;
-  //const editarActivado=document.getElementById("editarActivado").value; //AGREGAR ESTE
-
-  await fetch("http://localhost:4011/api/perfilxdia/?dia="+editarDia+"&planta="+editarPlanta+"&institucion="+institucionGlobal,
- {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({       
-      //"activado": editarActivado, //AGREGAR ESTE
-      "horaDesde":editarHoraDesde,
-      "horaHasta":editarHoraHasta          
-      
-     }),
-  })
-  listar();
+  const editarHoraDesde=document.getElementById("horaInicialEditar").value;
+  const editarHoraHasta=document.getElementById("horaLimiteEditar").value;
+  if(editarHoraDesde>=editarHoraHasta){
+    alert("La hora inicio no debe ser mayor a la hora limite");
+  }else{
+    await fetch("https://ahorro-energetico-api-pereven.herokuapp.com/eventos/?dia="+editarFecha+"&planta="+editarPlanta+"&institucion="+institucionGlobal,
+    {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({       
+        "fecha":editarFecha,
+        "activado": botonActivadoEditar,
+        "horaDesde":editarHoraDesde,
+        "horaHasta":editarHoraHasta,   
+        "planta": editarPlanta,
+        "institucion":institucionGlobal
+        
+      }),
+    })
+    listar();
+  }
 }
 
+function format(dato) {
+  const date = new Date(dato);
+  const [year, month, day] = [date.getFullYear(), date.getMonth()+1, date.getDate()];
+  return day.toString().padStart(2, '0') + "-" + month.toString().padStart(2, '0') + "-" + year;
+}
+
+function formatoInvertido(dato) {
+  const date = new Date(dato);
+  const [year, month, day] = [date.getFullYear(), date.getMonth()+1, date.getDate()];
+  return year + "-" + month.toString().padStart(2, '0') + "-" + day.toString().padStart(2, '0');
+}
+
+
 async function agregarPerfilEvento() {
-  var fecha = document.getElementById("agregarFecha").value;
+
+  var fecha = document.getElementById("agregarFecha").value; 
   var planta = document.getElementById("comboPlantaAgregar").value;
   var horaInicial = document.getElementById("horaInicialAgregar").value;
   var horaLimite = document.getElementById("horaLimiteAgregar").value; 
-
-  //PRUEBAS DE QUE AGARRA, SIEMPRE ES ON
-  console.log(document.getElementById("danger-outlined").value);
-  console.log(document.getElementById("success-outlined").value);
-  
-  //activado =document.getElementById("success-outlined").value;
-  //activado = (activado == "off" ? 0 : activado == "off" ? 1:1);
-
-  //FORZADO PORQUE TODAVIA NO LO PUEDO AGARRAR
-  activado=1;
-
-//  console.log(activado);
-
-  /*console.log(fecha);
-  console.log(planta);
-  console.log(horaInicial);
-  console.log(horaLimite);*/
-
-  const data = {
-    "fecha": fecha,
-    "activado": activado,
-    "horaDesde": horaInicial,
-    "horaHasta": horaLimite,
-    "planta": planta,
-    "institucion":institucionGlobal
-    
-  };
- 
-  await fetch("http://localhost:4012/api/eventos", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  listar();
+  if(fecha==undefined || fecha=="" ||
+  planta==undefined || planta=="" ||
+  horaInicial==undefined || horaInicial=="" ||
+  horaLimite==undefined || horaLimite=="" ){
+    alert("Los campos no pueden estar vacios");
+  }else {
+    if(horaInicial>=horaLimite){
+      alert("La hora inicio no debe ser mayor a la hora limite");
+    }else{
+      const data = {
+        "fecha": fecha,
+        "activado": botonActivadoAgregar,
+        "horaDesde": horaInicial,
+        "horaHasta": horaLimite,
+        "planta": planta,
+        "institucion":institucionGlobal
+        
+      };
+      
+      await fetch("https://ahorro-energetico-api-pereven.herokuapp.com/api/eventos", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      listar();
+    }
+  }
 }
 
 

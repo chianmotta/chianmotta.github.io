@@ -33,14 +33,14 @@ const callApi = () => {
 };
 
 async function listar(descripcion) {
-  var res = await fetch("http://localhost:4001/api/descripciones/?descripcion=" + descripcion + "&institucion=" + institucionGlobal)
+  var res = await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" + descripcion + "&institucion=" + institucionGlobal)
   var registroHTML = "";
   var data = await res.json();
 
   for (var i = 0; i < data.length; i++) {
     var obj = data[i];
     registroHTML +=
-      `<tr class="table-success"><th scope="row">${obj.id}</th> <td>${obj.descripcion}</td>
+      `<tr class="table-success"><td>${obj.descripcion}</td>
         <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.id}","${obj.descripcion}")'>Editar</button>
         <button class="btn btn-danger" onclick="eliminarDescripcion(${obj.id})">Eliminar</button></td></tr>`;
   }
@@ -58,7 +58,7 @@ async function eliminarDescripcion(id) {
     cancelButtonText: "Cancelar",
     confirmButtonText: 'Si, Eliminar!'
   }).then(async (result) => {
-    await fetch("http://localhost:4001/api/descripciones/" + id, {
+    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" + id, {
       method: 'DELETE',
     });
 
@@ -69,7 +69,8 @@ async function eliminarDescripcion(id) {
         title: 'Eliminado con éxito',
         showConfirmButton: false,
       })
-      listar("");
+      await delay(1.5);
+      ActualizarPagina();
     }
   })
 }
@@ -82,36 +83,85 @@ function editar(id, descripcion) {
 
 async function editarDescripcion() {
   const descripcion = document.getElementById("recipiente-editar").value
-
-  await fetch("http://localhost:4001/api/descripciones/" + idEditar, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ 
-      "descripcion": descripcion,
-      "institucion": institucionGlobal,
-      "jurisdiccion": jurisdiccion
-     }),
-  })
-  listar("");
+  if (descripcion=="" || descripcion==undefined){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de ingreso de datos!',
+        text: 'Ingrese la descripción.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#1B9752',
+      })
+      return;
+    }
+  else{
+    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" + idEditar, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        "descripcion": descripcion,
+        "institucion": institucionGlobal,
+        "jurisdiccion": jurisdiccion
+      }),
+    })
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Modificado con éxito',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    await delay(1.5);
+    ActualizarPagina();
+  }
 }
 
 async function agregarDescripcion() {
   var recipiente = document.getElementById("recipiente-agregar").value;
+  
+  if (recipiente=="" || recipiente==undefined){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'Ingrese la descripción.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })
+    return;
+  }else{
+    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        "descripcion": recipiente, 
+        "institucion": institucionGlobal,
+        "jurisdiccion": jurisdiccion
+      }),
+    });
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Añadido con éxito',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    await delay(1.5);
+    ActualizarPagina();
+ 
+  }
+}
 
-  await fetch("http://localhost:4001/api/descripciones", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ 
-      "descripcion": recipiente, 
-      "institucion": institucionGlobal,
-      "jurisdiccion": jurisdiccion
-    }),
+function delay(n) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, n * 1000);
   });
-  listar("");
+}
+
+function ActualizarPagina() {
+  location.reload();
 }
 
 apiButton.addEventListener("click", callApi);

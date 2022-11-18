@@ -28,7 +28,7 @@ function buscar() {
 
 async function listar(descripcion) {
     var res = await fetch(
-      "http://localhost:4022/api/meta/historica/?descripcion=" + descripcion + "&institucion=" + institucionGlobal, {
+      "https://ahorro-energetico-api-meta.herokuapp.com/api/meta/historica/?descripcion=" + descripcion + "&institucion=" + institucionGlobal, {
     });
     var registroHTML = "";
     var data = await res.json();
@@ -36,7 +36,7 @@ async function listar(descripcion) {
     for (var i = 0; i < data.length; i++) {
       var obj = data[i];
       registroHTML +=
-        `<tr class="table-success"><th scope="row">${obj.id}</th> 
+        `<tr class="table-success">
             <td>${obj.descripcion}</td> <td>${format(obj.fechaDesde)}</td> <td>${format(obj.fechaHasta)}</td> <td>${obj.consumoEsperado}</td> </tr>`;
     }
     document.querySelector("#Registros").innerHTML = registroHTML;
@@ -49,7 +49,7 @@ function format(dato) {
 }
 
 async function cargarCombo() {
-    var res = await fetch("http://localhost:4001/api/descripciones");
+    var res = await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones");
     var registroHTML = "";
     var data = await res.json();
   

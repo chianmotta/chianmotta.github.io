@@ -15,6 +15,7 @@ var cont;
 var institucionGlobal;
 var usuarioGlobal;
 var categoriaGlobal;
+var criterioSeleccionado;
 
 var TemperaturaInput = document.getElementById("TemperaturaInput");
 var MinMaxInput = document.getElementById("MinMaxInput");
@@ -29,20 +30,18 @@ document.body.onload = () => {
     usuarioGlobal = sessionStorage.getItem('usuario');
     console.log(institucionGlobal,usuarioGlobal);
     document.getElementById("spanInfo").innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`
-    cargarRows(0,0);
-    CargarDispositivos();
-    CargarCriterios();
   }
   else{
     institucionGlobal = "La manzana de isaac";
-    cargarRows(0,0);
-    CargarDispositivos();
-    CargarCriterios();
+    
   }
+  cargarRows(0,0,0);
+  CargarDispositivos();
+  CargarCriterios();
 }
 
 function obtenerid (Criterio, AccionAplicar, descId){
-  ModificarURL = "http://localhost:4000/api/accion/?institucion="+institucionGlobal+"&idCriterio="+Criterio+"&accionAplicar="+AccionAplicar+"&descId="+ descId;
+  ModificarURL = "https://ahorro-energetico-api-accion.herokuapp.com/api/accion/?institucion="+institucionGlobal+"&idCriterio="+Criterio+"&accionAplicar="+AccionAplicar+"&descId="+ descId;
   console.log(ModificarURL);
 }
 
@@ -57,15 +56,24 @@ function ModAccion(){
     headers:{
       'Content-Type': 'application/json'
     }
-  }).then(res => res.json())
+  }).then(res => cartelitoModificadoConExito())
   .catch(error => console.error('Error:', error))
-  .then(response => console.log('Success:', response));
-  ActualizarPagina();
+  
 
 }
-
+async function cartelitoModificadoConExito(){
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Modificado con éxito',
+    showConfirmButton: false,
+    timer: 1500,
+  });
+  await delay(1.5);
+  ActualizarPagina();
+}
 function CargarRowsCriterio() {
-  fetch(`http://localhost:4006/api/criterios?institucion=${institucionGlobal}`)
+  fetch(`https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios/?institucion=${institucionGlobal}`)
     .then((res) => res.json())
     .then(async (data) => {
       indiceEscrituraCriterio.innerHTML ="";
@@ -89,6 +97,7 @@ function ObtenerRegistroCriterio(criterioID, objetivo, dato, valorMIN, valorMAX)
   TemperaturaInput.value = dato;
   MinMaxInput.value = valorMIN + ' : ' + valorMAX;
   ObjetivoInput.value =objetivo;
+  criterioSeleccionado = criterioID;
 }
 
 
@@ -97,7 +106,7 @@ function ComprobarSeleccion(){
 
 }
 function criterioDatos() {
-  fetch(`http://localhost:4006/api/criterios?institucion=${institucionGlobal}`)
+  fetch(`https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios/?institucion=${institucionGlobal}`)
   .then((res) => res.json())
   .then(async (data) => {
     for (var i = 0; i < data.length; i++) {
@@ -121,7 +130,7 @@ function criterioDatos() {
 
 
 function CargarDispositivos() {
-  fetch(`http://localhost:4001/api/descripciones?institucion=${institucionGlobal}`)
+  fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?config=" + true + "institucion=" + institucionGlobal)
   .then((res) => res.json())
   .then(async (data) => {
     var registroHTML = "";
@@ -134,7 +143,7 @@ function CargarDispositivos() {
 }
 
 function CargarCriterios() {
-  fetch(`http://localhost:4006/api/criterios?institucion=${institucionGlobal}`)
+  fetch(`https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios/?institucion=${institucionGlobal}`)
   .then((res) => res.json())
   .then(async (data) => {
     var registroHTML = "";
@@ -147,10 +156,8 @@ function CargarCriterios() {
   }) 
 }
 
-function cargarRows(descripID, accion) {
-        fetch("http://localhost:4000/api/accion/descripcion/?descID=" + descripID + "&accionAplicar=" + accion + "&institucion=" + institucionGlobal)
-        //fetch("http://localhost:4000/api/accion/descripcion/?descID=1&accionAplicar=1&institucion=La manzana de isaac")
-        //localhost:4000/api/accion/descripcion/?descID=0&accionAplicar=0&institucion=La%20manzana%20de%20isaac
+function cargarRows(descripID, accion, criterioID) {
+        fetch("https://ahorro-energetico-api-accion.herokuapp.com/api/accion/descripcion/?descID=" + descripID + "&accionAplicar=" + accion + "&criterioID=" + criterioID + "&institucion=" + institucionGlobal)
 
           .then((res) => res.json())
           .then(async (data) => {
@@ -163,7 +170,7 @@ function cargarRows(descripID, accion) {
                           <td>${dat.accionAplicar}</td>
                           <td>${dat.descripcion}</td>
                           <td>${dat.prioridad}</td>
-                          <td> <button type="button" onclick='obtenerid("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descID}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalModificar">Modificar</button>
+                          <td> <button type="button" onclick='obtenerid("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descID}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalModificar">Editar</button>
                           <button type="button" onclick='EliminarAccion("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descID}")' class="btn btn-danger">Eliminar</button></td>
                         </tr>`
                         ) }                                                                                                              
@@ -171,21 +178,51 @@ function cargarRows(descripID, accion) {
       }
       
 function EliminarAccion(Criterio, AccionAplicar, descId){
-  fetch('http://localhost:4000/api/accion/?institucion='+institucionGlobal+'&idCriterio='+Criterio+'&accionAplicar='+AccionAplicar+'&descId='+descId, {
-    method: 'DELETE',
-})
+  Swal.fire({
+    title: '¿Está seguro, que desea eliminar esta meta?',
+    text: "¡No podrás revertir esto!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#1B9752',
+    cancelButtonColor: '#d33',
+    cancelButtonText: "Cancelar",
+    confirmButtonText: 'Si, Eliminar!'
+  }).then(async (result) => {
+    fetch('https://ahorro-energetico-api-accion.herokuapp.com/api/accion/?institucion='+institucionGlobal+'&idCriterio='+Criterio+'&accionAplicar='+AccionAplicar+'&descId='+descId, {
+      method: 'DELETE',
+    })
+    if (result.isConfirmed) {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Eliminado con éxito',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      await delay(1.5);
+      ActualizarPagina();
+    }
+  })
+
 .then(res => res.json())
-.then(res=> {
+.then(async res=> {
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Eliminado con éxito',
+    showConfirmButton: false,
+    timer: 1500,
+  });
+  await delay(1.5);
   ActualizarPagina();
 });
   }
 
 function ActualizarPagina(){
-location. reload();
+  cargarRows(0,0,0);
 }
 
 function AgregarNuevaAccion(){
-  console.log("Holis")
   debugger;
     var data = {
         "criterioID": document.getElementById("AgregarCriterio").value,
@@ -195,79 +232,38 @@ function AgregarNuevaAccion(){
         "institucion":institucionGlobal
     }
     JSONdata = JSON.stringify(data);
-    fetch("http://localhost:4000/api/accion", {
+    fetch("https://ahorro-energetico-api-accion.herokuapp.com/api/accion", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSONdata,
     })
-    .then((res)=>{
+    .then(async (res)=>{
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Añadido con éxito',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      await delay(1.5);
       ActualizarPagina();
     })
     .catch((error)=>{console.log("Ocurrio un error: ", error)})
   }
-  function BuscarAccion(){
-    var Accion = document.getElementById("BuscarPorAccion").value;
-    var Dispositivo = document.getElementById("BuscarPorDispositivo").value;
-    var Criterio = document.getElementById("BuscarPorDispositivo").value;
-    
-    cargarRows(Dispositivo, Accion);
-    /*fetch('http://localhost:4000/api/accion')
-    .then((res) => res.json())
-    .then(async (data) => {
-          indice.innerHTML ="";
 
-          for (var i = 0; i < data.length; i++) {
-            if(Accion == "Todos" && data[i].descId == Dispositivo){
-                
-              indice.innerHTML += (
-                `<tr class="table-success">
-                <td>${dat.criterioID}</td>
-                <td>${dat.accionAplicar}</td>
-                <td>${dat.descId}</td>
-                <td>${dat.prioridad}</td>
-                <td> <button type="button" onclick='obtenerid("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descId}", "${dat.descId}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalModificar">Modificar</button>
-                 <button type="button" onclick='EliminarAccion("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descId}")' class="btn btn-danger">Eliminar</button></td>
-              </tr>`
-              ) }
-        }
-        for (var i = 0; i < data.length; i++) {
-            if(Accion == "Todos" && Dispositivo == "Todos"){
-                cargarRows(0,0);
-        }
-    }
-            for (var i = 0; i < data.length; i++) {
-                if(Dispositivo == "Todos" && data[i].accionAplicar == Accion){
-                  indice.innerHTML += (
-                    `<tr class="table-success">
-                    <td>${dat.criterioID}</td>
-                    <td>${dat.accionAplicar}</td>
-                    <td>${dat.descId}</td>
-                    <td>${dat.prioridad}</td>
-                    <td> <button type="button" onclick='obtenerid("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descId}", "${dat.descId}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalModificar">
-                     Modificar</button></td><td><button type="button" 
-                    onclick='EliminarAccion("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descId}")' 
-                    class="btn btn-danger">Eliminar</button></td>
-                  </tr>`
-                  ) }
-            }
-          for (var i = 0; i < data.length; i++) {
-            if(data[i].accionAplicar == Accion && data[i].descId == Dispositivo){
-                
-              indice.innerHTML += (
-                `<tr class="table-success">
-                <td>${dat.criterioID}</td>
-                <td>${dat.accionAplicar}</td>
-                <td>${dat.descId}</td>
-                <td>${dat.prioridad}</td>
-                <td> <button type="button" onclick='obtenerid("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descId}", "${dat.descId}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalModificar">
-                 Modificar</button></td><td><button type="button" 
-                onclick='EliminarAccion("${dat.criterioID}" , "${dat.accionAplicar}", "${dat.descId}")' 
-                class="btn btn-danger">Eliminar</button></td>
-              </tr>`
-              )}
-        }
-    })
-    */
+function BuscarAccion(){
+  var Accion = document.getElementById("BuscarPorAccion").value;
+  var Dispositivo = document.getElementById("BuscarPorDispositivo").value;
+  cargarRows(Dispositivo, Accion, criterioSeleccionado);
+}
+function delay(n) {
+return new Promise(function (resolve) {
+  setTimeout(resolve, n * 1000);
+});
+}
+
+function ActualizarPagina() {
+location.reload();
 }

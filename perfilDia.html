@@ -16,9 +16,7 @@
   </nav>
     <!--div class="container"-->
     
-     <!--div class="container"-->
-    
-     <div class="container-fluid">
+    <div class="container-fluid">
       <div class=" row flex-nowrap">
           <div class=" container2 col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-succes rounded">
               <div class="d-flex flex-column align-items-center align-items-sm-start text-white px-3 pt-2 min-vh-90">
@@ -40,8 +38,7 @@
                           </a>                          
                           <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="dispositivo.html">Dispositivos</a></li>
-                            <li><a class="dropdown-item" href="descripcion.html">Categorias</a></li>                          
-                            <li><a class="dropdown-item" href="informesDispositivosRotos.html">Informe de dispositivos rotos</a></li>                          
+                            <li><a class="dropdown-item" href="descripcion.html">Categorias</a></li>                                                                              
                           </ul>                          
                         </li>
                       </ul>                           
@@ -68,15 +65,20 @@
                           <li><a class="dropdown-item" href="perfilEvento.html">Perfil por evento</a></li>
                         </ul>                          
                       </li>
-                    </ul>                  
+                    </ul>  
+                    <li class="nav-item">
+                      <a href="recomendaciones.html" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-house"></i> <span class="text-white ms-1 d-none d-sm-inline">Recomendaciones</span>
+                      </a>
+                    </li>                         
                     <ul class="navbar-nav dropend nav-link align-middle px-0">
                       <li class="nav-item dropdown btn-group dropend">                          
                         <a class="nav-link dropdown-toggle text-white ms-1 d-none d-sm-inline" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Recomendaciones
+                        Solicitudes
                         </a>                          
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="recomendaciones.html">Recomendaciones cargadas</a></li>
-                          <li><a class="dropdown-item" href="sugerenciasRealizadas.html">Sugerencias recibidas</a></li>                                                                        
+                          <li><a class="dropdown-item" href="informesDispositivosRotos.html">Informe de dispositivos rotos</a></li>  
+                          <li><a class="dropdown-item" href="sugerenciasRealizadas.html">Recomendaciones recibidas</a></li>                                                                        
                         </ul>                          
                       </li>
                     </ul>                                             
@@ -90,12 +92,7 @@
                             <li><a class="dropdown-item" href="metasHistoricas.html">Metas historicas</a></li>                          
                           </ul>                          
                         </li>
-                      </ul>                          
-                      <li class="nav-item">
-                        <a href="historialConsumo.html" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="text-white ms-1 d-none d-sm-inline">Historial de consumo</span>
-                        </a>
-                      </li>         
+                      </ul>                                                
                       <li class="nav-item">
                         <a href="notificaciones.html" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class="text-white ms-1 d-none d-sm-inline">Notificaciones</span>
@@ -152,7 +149,6 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Día</th>
         <th scope="col">Horario inicial</th>
         <th scope="col">Horario limite</th>
@@ -160,7 +156,7 @@
         <th scope="col">Sistema</th>        
       </tr>
     </thead>
-    <tbody class="table-group-divider" , id="tabla"></tbody>
+    <tbody class="table-group" , id="tabla"></tbody>
   </table>
    
   

@@ -34,8 +34,11 @@
                   <a href="dispositivos_rotos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Informar dispositivo roto </span> </a>
               </li>
               <li>
-                <a href="sugerencias_alumnos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Realizar recomendación sobre tipo dispositivo </span> </a>
+                <a href="sugerencias_alumnos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Realizar recomendación</span> </a>
             </li>
+            <li>
+              <a href="ayudaAlumnos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Ayuda</span> </a>
+          </li>
                                      
                 </ul>
                 <hr>
@@ -43,14 +46,14 @@
             </div>
         </div>
           
-    <div class="container col py-3">
+    <div class="container col py-3">  
       
     <h1>Realizar recomendación
       </h1>
       
 <!-- Button trigger modal -->
     
-      <p>Ingrese el tipo de dispostivo</p>
+      <p>Ingrese la categoría de dispostivo</p>
       <select class="form-select" aria-label="Default select example" id="comboBoxDispositivo">
         <option></option>
       </select>
@@ -62,6 +65,7 @@
       </div>
       <br></br>
       <button type="button" class="btn btn-success" onclick = RealizarRecomendacion();>Enviar</button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalGrafico" >Ver grafico</button>
 
       <br></br>
       <h2>Listado de recomendaciones enviadas</h2>
@@ -72,12 +76,12 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th scope="col">Tipo de dispositivo</th>
+            <th scope="col">Categoría de dispositivo</th>
             <th scope="col">Recomendación</th>
             <th scope="col">Nombre del alumno</th>
           </tr>
         </thead>
-        <tbody class="table-group-divider" , id="Registros">
+        <tbody class="table-group" , id="Registros">
         </tbody>
       </table>
     </div>
@@ -103,12 +107,77 @@
       ></iframe>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!--MODALES -->
+<div class="modal fade" id="ModalGrafico" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Consumo por categoria de dispositivo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <iframe class="iFrameClass" 
+              style="display: block;"
+              id="iframe_id"
+              src="https://pp1.ath.cx:8443/public/question/53e63619-73bf-4471-a323-ac5fdcaf579f?anio=2022#hide_parameters=anio,mes,areaId,tipoDispositivo"
+              frameborder="0"
+              width="90%"
+              height="600"
+              allowtransparency
+          ></iframe>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <label for="recipient-editar"  class="col-form-label">Año</label>
+              <select class="form-select" id="inputAnio" aria-label="Default select example" id="editarPiso">
+              <option value="2022">2022</option>
+            </select>
+            </div>
+            <div class="col">
+              <label for="recipient-editar" class="col-form-label">Mes</label>
+              <select class="form-select" id="inputMes"  aria-label="Default select example" id="editarPiso">
+              <option value="0">----</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+            </select>
+            </div>
+            <div class="col">
+              <label for="recipient-editar" class="col-form-label">Categoria</label>
+              <select class="form-select" id="inputTipoDispositivo" aria-label="Default select example" id="editarPiso">
+                
+            </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button  class="btn btn-success" onclick="actualizarGrafico()">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
   crossorigin="anonymous"></script>

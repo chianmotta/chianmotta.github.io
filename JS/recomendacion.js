@@ -1,7 +1,4 @@
-
-var sql = "http://localhost:4013/api/recomendacion/gets"
 var indice = document.getElementById("Registros");
-var ComboBoxDispositivoNuevo = document.getElementById("ComboBoxNuevoDispositivo");
 var ComboBoxDispositivo = document.getElementById("comboBoxDispositivo");
 var InputNuevaRecomendacion = document.getElementById("InputNuevaRecomendacion");
 var idDesc;
@@ -19,39 +16,32 @@ document.body.onload = () => {
     institucionGlobal = sessionStorage.getItem("institucion");
     usuarioGlobal = sessionStorage.getItem('usuario');
     console.log(institucionGlobal,usuarioGlobal);
-    document.getElementById("spanInfo").innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`
-    listar();
+    document.getElementById("spanInfo").innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
   }
   else{
     institucionGlobal = "La manzana de isaac";
-    listar();
   }
+  Listar ("");
+  BoxDispositivo();
 }
 
-async function listar() {
-     await fetch(sql)
+async function Listar(descripcion) {
+     await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/gets/?descripcion=" + descripcion)
       .then((res) => res.json())
       .then(async (data) => {
         indice.innerHTML ="";
-        ComboBoxDispositivo.innerHTML = "";
-            for (var i = 0; i < data.length; i++) {
-              var NombreDispositivo; 
-              var sql = "http://localhost:4001/api/descripciones/"+data[i].id; 
-              await fetch(sql)
-               .then((res) => res.json())
-               .then(async (descripcionData) => {
-                indice.innerHTML += (
+        for (var i = 0; i < data.length; i++) {
+            indice.innerHTML += (
                         `
                         <tr class="table-success">
-                        <td>${await fetch("http://localhost:4001/api/descripciones/"+data[i].descID).then((res) => res.json())
-                           .then(async (data) => data[0].descripcion)}</td>
+                        <td>${data[i].descripcion}</td>
                         <td>${data[i].recomendacion}</td>
-                        <td><button type="button" onclick="ObtenerInformacionAnterior(${data[i].id},${data[i].descID}, '${data[i].recomendacion}', '${data[i].institucion}', '${data[i].jurisdiccion}', '${NombreDispositivo}')" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Modificar</button></td>
+                        <td><button type="button" onclick="ObtenerInformacionAnterior(${data[i].id}, '${data[i].recomendacion}')" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button></td>
                         <td><button type="button" onclick="EliminarAccion(${data[i].id})" class="btn btn-danger">Eliminar</button></td>
                         </tr>
                         `
-              )})}                
-              BoxDispositivo();
+              )}                
+              
                         
               
 
@@ -69,7 +59,7 @@ async function EliminarAccion(id){
       cancelButtonText: "Cancelar",
       confirmButtonText: 'Si, Eliminar!'
     }).then(async (result) => {
-      await fetch("http://localhost:4013/api/recomendacion/?id="+ id, {
+      await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/?id=" + id + "&institucion=La manzana de Isaac" ,{
         method: 'DELETE'})
       if (result.isConfirmed) {
         Swal.fire({
@@ -81,62 +71,41 @@ async function EliminarAccion(id){
         })
         await delay(1.5);
         ActualizarPagina();
+        
       }
     })
 }
+
 async function BoxDispositivo(){
-  await fetch("http://localhost:4001/api/descripciones")
-  .then((res) => res.json())
-  .then(async (data) => {
-    ComboBoxDispositivo.innerHTML ="<option>Todos</option";
-    ComboBoxDispositivoNuevo.innerHTML ="";
-        for (var i = 0; i < data.length; i++) {
-          ComboBoxDispositivo.innerHTML += (
-                  `
-                  <option>${data[i].descripcion}</option>
-                  `
-                )
-              
-                ComboBoxDispositivoNuevo.innerHTML  +=(
-                  `
-                  <option>${data[i].descripcion}</option>
-                  `) 
-               }                                                                                                              
-                });
+  var res = await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones")
+  var data = await res.json();
+  var registroHTML = "";
+
+  for (var i = 0; i < data.length; i++) {
+    var obj = data[i];
+    registroHTML += `<option value=${obj.id}>${obj.descripcion}</option>` 
+  }     
+  document.getElementById("comboBoxDispositivo").innerHTML = `<option value="">Todos</option>` + registroHTML;
+  document.getElementById("ComboBoxNuevoDispositivo").innerHTML = registroHTML;                                                                                                                            
 }
 
   
 async function Buscar(){
   var ComboBoxDispositivo = document.getElementById("comboBoxDispositivo");
   if(ComboBoxDispositivo.value == "Todos"){
-    Listar();
+    Listar("");
 
   }
   else{
-  var url = "http://localhost:4001/api/descripciones/?descripcion="+ComboBoxDispositivo.value
-  await fetch(url)
-  .then((res) => res.json())
-  .then(async (data) => {
-      ListarPorFiltro(data[0].id);
+    Listar(ComboBoxDispositivo.value);
   }
-  )
-  }
-  }
-    
+}
 
 async function agregarRecomendacion(){
-  Swal.fire({
-    title: '¿Desea agregar esta recomendación?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#1B9752',
-    cancelButtonColor: '#d33',
-    cancelButtonText: "Cancelar",
-    confirmButtonText: 'Si, Agregar!'
-  }).then(async (result) => {
+
     
   descripcion = document.getElementById("ComboBoxNuevoDispositivo").value;
-  var url = "http://localhost:4001/api/descripciones/?descripcion=" + descripcion
+  var url = "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" + descripcion
   var RecomendacionNueva =  document.getElementById("InputNuevaRecomendacion").value;
   if(CondicionesDeAceptacion(RecomendacionNueva) == false){
     return;
@@ -151,14 +120,13 @@ async function agregarRecomendacion(){
       "jurisdiccion": "Ciudad Autónoma de Buenos Aires"
   }
   JSONdata = JSON.stringify(NuevaRecomendacionJSON);
-  await fetch("http://localhost:4013/api/recomendacion/", {
+  await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSONdata,
   })
-    if (result.isConfirmed) {
       Swal.fire({
         position: 'top-center',
         icon: 'success',
@@ -168,68 +136,30 @@ async function agregarRecomendacion(){
       })
       await delay(1.5);
       ActualizarPagina();
-      
-    }
-    
-  }
-  )
-})
-}
-
+  })}
 function delay(n){
   return new Promise(function(resolve){
       setTimeout(resolve,n*1000);
   });
 }
-async function ListarPorFiltro(PorDispositivo){
-  await fetch(sql)
-  .then((res) => res.json())
-  .then(async (data) => {
-    indice.innerHTML ="";
-        for (var i = 0; i < data.length; i++) {
-          if(data[i].descID == PorDispositivo){
-          var NombreDispositivo; 
-          var sql = "http://localhost:4001/api/descripciones/"+data[i].id; 
-          await fetch(sql)
-           .then((res) => res.json())
-           .then(async (data) => {
-            NombreDispositivo = data[0].descripcion;
-          }
-           )
-          indice.innerHTML += (
-            `
-            <tr class="table-success">
-            <td>${await fetch("http://localhost:4001/api/descripciones/"+data[i].descID).then((res) => res.json())
-               .then(async (data) => data[0].descripcion)}</td>
-            <td>${data[i].recomendacion}</td>
-            <td><button type="button" onclick="ObtenerInformacionAnterior(${data[i].id},${data[i].descID}, '${data[i].recomendacion}', '${data[i].institucion}', '${data[i].jurisdiccion}', '${NombreDispositivo}')" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Modificar</button></td>
-            <td><button type="button" onclick="EliminarAccion(${data[i].id})" class="btn btn-danger">Eliminar</button></td>
-            </tr>`
-                ) }                                                                                                         
-              }});
-}
 
-function ObtenerInformacionAnterior(id, descID, recomendacion, institucion, jurisdiccion, NombreDispositivo){
+function ObtenerInformacionAnterior(id, recomendacion){
+  console.log(recomendacion);
   idAnterior = id;
   document.getElementById("InputRecomendacion").value = recomendacion;
 }
 async function Modificar(){
-  Swal.fire({
-    title: '¿Está seguro, que desea modificar la recomendación?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#1B9752',
-    cancelButtonColor: '#d33',
-    cancelButtonText: "Cancelar",
-    confirmButtonText: 'Si, Modificar!'
-  }).then(async (result) => {
+ 
     var RecomendacionNueva = document.getElementById("InputRecomendacion").value;
     var data ={
       "recomendacion": [
         RecomendacionNueva
       ]
     }
-    const url  = "http://localhost:4013/api/recomendacion/?id="+ idAnterior
+    if(CondicionesDeAceptacion(RecomendacionNueva)==false){
+      return;
+    }
+    const url  = "https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/?id="+ idAnterior + "&institucion=La manzana de isaac"
     await fetch(url, {
       method: 'PUT', // or 'PUT'
       body: JSON.stringify(data), // data can be `string` or {object}!
@@ -239,8 +169,7 @@ async function Modificar(){
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
     .then(response => console.log('Success:', response));
-    if (result.isConfirmed) {
-      Swal.fire({
+        Swal.fire({
         position: 'top-center',
         icon: 'success',
         title: 'Modificado con éxito',
@@ -250,12 +179,10 @@ async function Modificar(){
       await delay(1.5);
       ActualizarPagina();
     }
-  })
-}
 
 
 function ActualizarPagina(){
-  location. reload();
+    Listar("");
   }
 
 

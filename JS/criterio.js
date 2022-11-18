@@ -18,7 +18,6 @@ document.body.onload = () => {
   }
   else{
     institucionGlobal = "La manzana de isaac";
-    
   }
   buscar("","");
 }
@@ -33,8 +32,9 @@ const callApi = () => {
 };
 
 async function buscar(dato, valor) {
+  
   const res = await fetch(
-    `http://localhost:4006/api/criterios/?dato=${dato}&valor=${valor}&institucion=${institucionGlobal}`, {
+    `https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios/?dato=${dato}&valor=${valor}&institucion=${institucionGlobal}`, {
   });
   var registroHTML = "";
   var data = await res.json();
@@ -42,7 +42,7 @@ async function buscar(dato, valor) {
   for (var i = 0; i < data.length; i++) {
     var obj = data[i];
     registroHTML +=
-      `<tr class="table-success"><th scope="row">${obj.criterioID}</th> 
+      `<tr class="table-success">
         <td>${obj.dato}</td> <td>${obj.valorMIN}</td> <td>${obj.valorMAX}</td> <td>${obj.objetivo}</td>
         <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.criterioID}", "${obj.dato}","${obj.valorMIN}","${obj.valorMAX}","${obj.objetivo}")'>Editar</button>
         <button class="btn btn-danger" onclick="eliminarCriterio(${obj.criterioID})">Eliminar</button></td></tr>`;
@@ -70,7 +70,7 @@ async function eliminarCriterio(id) {
     cancelButtonText: "Cancelar",
     confirmButtonText: 'Si, Eliminar!'
   }).then(async (result) => {
-    await fetch("http://localhost:4006/api/criterios/" + id, {
+    await fetch("https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios/" + id, {
       method: 'DELETE',
     })
 
@@ -80,8 +80,10 @@ async function eliminarCriterio(id) {
         icon: 'success',
         title: 'Eliminado con éxito',
         showConfirmButton: false,
+        timer: 1500,
       })
-      buscar("","");
+      await delay(1.5);
+      ActualizarPagina();
     }
   })
 }
@@ -91,7 +93,30 @@ async function agregarCriterio() {
   var dato = document.getElementById("agregarIndicador").value;
   var valorMIN = document.getElementById("agregar_valorMIN").value;
   var valorMAX = document.getElementById("agregar_valorMAX").value;
-
+  console.log(document.getElementById("agregar_valorMAX").value <= document.getElementById("agregar_valorMIN").value);
+  
+  if((document.getElementById("agregar_valorMAX").value <= document.getElementById("agregar_valorMIN").value)==false){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'El valor máximo debe ser mayor al valor mínimo, por favor, intente corregir dichos datos.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })
+    return;
+  }
+  
+  if(valorMIN == "" || valorMAX==""){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'Falta llenar campos.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })
+    return;
+    
+  }
   const data = {
     "objetivo": objetivo,
     "dato": dato,
@@ -100,22 +125,58 @@ async function agregarCriterio() {
     "institucion": institucionGlobal,
     "jurisdiccion": jurisdiccion
   };
+  
 
-  await fetch("http://localhost:4006/api/criterios", {
+  await fetch("https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
-  buscar("","")
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Añadido con éxito',
+    showConfirmButton: false,
+    timer: 1500,
+  });
+  await delay(1.5);
+  ActualizarPagina();
+
+
 }
 
 async function editarCriterio() {
+  
   var objetivo = document.getElementById("editarObjetivo").value;
   var dato = document.getElementById("editarIndicador").value;
   var valorMIN = document.getElementById("editar_valorMIN").value;
   var valorMAX = document.getElementById("editar_valorMAX").value;
+  
+  
+  if(valorMIN == "" || valorMAX==""){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'Falta llenar campos.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })
+    return;
+    
+  }
+  /*
+  if((Math.abs(valorMIN)  >= Math.abs(valorMAX))){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'El valor máximo debe ser mayor al valor mínimo, por favor, intente corregir dichos datos.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })
+    return;
+  }*/
 
   const data = {
     "objetivo": objetivo,
@@ -126,16 +187,35 @@ async function editarCriterio() {
     "jurisdiccion": jurisdiccion
   };
 
-  await fetch("http://localhost:4006/api/criterios/" + idEditar, {
+  await fetch("https://ahorro-energetico-api-criterio.herokuapp.com/api/criterios/" + idEditar+"?institucion=La manzana de isaac", {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
   });
-  buscar("","")
+  Swal.fire({
+    position: 'center',
+    icon: 'success',
+    title: 'Modificado con éxito',
+    showConfirmButton: false,
+    timer: 1500,
+  });
+  await delay(1.5);
+  ActualizarPagina();
+
 }
 
 apiButton.addEventListener("click", callApi);
 guardarButton.addEventListener("click", agregarCriterio);
 editarButton.addEventListener("click", editarCriterio);
+  
+function delay(n) {
+return new Promise(function (resolve) {
+  setTimeout(resolve, n * 1000);
+});
+}
+
+function ActualizarPagina() {
+location.reload();
+}

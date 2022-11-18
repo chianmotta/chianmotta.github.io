@@ -35,8 +35,11 @@
                   <a href="dispositivos_rotos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Informar dispositivo roto </span> </a>
               </li>
               <li>
-                <a href="sugerencias_alumnos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Realizar recomendación sobre tipo dispositivo </span> </a>
+                <a href="sugerencias_alumnos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Realizar recomendación</span> </a>
             </li>
+            <li>
+              <a href="ayudaAlumnos.html" class="nav-link px-0"> <span class="text-white d-none d-sm-inline"> Ayuda</span> </a>
+          </li>
                                      
                 </ul>
                 <hr>
@@ -54,13 +57,13 @@
       <!---->
       <form>
         <div class="mb-3">
-          <label for="recipient-editar" class="col-form-label">Piso</label>
+          <label for="recipient-editar" class="col-form-label">Planta</label>
           <select class="form-select" aria-label="Default select example" 
             onchange="cargarZonas(this.options[this.selectedIndex].text, editarZona)" id="editarPiso">
-            <option value="0">piso 0</option>
-            <option value="1">piso 1</option>
-            <option value="2">piso 2</option>
-            <option value="3">piso 3</option>
+            <option value="0">Baja</option>
+            <option value="1">Primera</option>
+            <option value="2">Segunda</option>
+            <option value="3">Tercera</option>
           </select>
         </div>
 
@@ -75,20 +78,20 @@
         <label for="recipient-name" class="col-form-label">Dispositivo</label>
         <select class="form-select" aria-label="Default select example" id="comboTipoDispositivo"></select>
       </div>
-      <button type="button" class="btn btn-success"  onclick="guardarDispositivoRoto()" id="guardarReporte">Guardar</button>
+      <button type="button" class="btn btn-success"  onclick="guardarDispositivoRoto()" id="guardarReporte">Enviar</button>
       <hr style="color:grey;" />
     <h2>Dispositivos rotos</h2>
     <table class="table table-hover">
       <thead>
         <tr>
-          <th scope="col">Tipo de dispositivo</th>
-          <th scope="col">Piso</th>
+          <th scope="col">Categoría de dispositivo</th>
+          <th scope="col">Planta</th>
           <th scope="col">Zona</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">nombre del alumno</th>
+          <th scope="col">Nombre del dispositivo</th>
+          <th scope="col">Nombre del alumno</th>
         </tr>
       </thead>
-      <tbody class="table-group-divider" , id="Registros"></tbody>
+      <tbody class="table-group" , id="Registros"></tbody>
     </table>
   </div>
   

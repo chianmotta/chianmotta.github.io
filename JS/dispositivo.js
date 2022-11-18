@@ -35,7 +35,7 @@ const callApi = () => {
 
 async function listar(tipoConexion, descripcion, piso) {
   var res = await fetch(
-    "http://localhost:4009/api/dispositivos/descripcion/?conexion=" + tipoConexion + "&descripcion=" + descripcion + "&planta=" + piso + "&institucion=" + institucionGlobal, {
+    "https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/descripcion/?conexion=" + tipoConexion + "&descripcion=" + descripcion + "&planta=" + piso + "&institucion=" + institucionGlobal, {
   });
   var registroHTML = "";
   var data = await res.json();
@@ -43,9 +43,9 @@ async function listar(tipoConexion, descripcion, piso) {
   for (var i = 0; i < data.length; i++) {
     var obj = data[i];
     registroHTML +=
-      `<tr class="table-success"><th scope="row">${obj.dispositivoID}</th> 
-          <td>${obj.descripcion}</td> <td>${obj.reparacion == 0 ? "No" : "Si"}</td> <td>${obj.aula}</td> <td>${obj.planta == 0 ? "Planta baja" : "Piso "+obj.planta}</td> <td>${obj.tipoConexion}</td> <td>${obj.direccionIP == "" ? "---------" : obj.direccionIP}</td> <td>${obj.consumo}</td>  
-          <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.dispositivoID}","${obj.tipoConexion}","${obj.descID}","${obj.reparacion}","${obj.planta}","${obj.aula}","${obj.direccionIP}","${obj.numeroDispArduino}","${obj.consumo}")'>Editar</button>
+      `<tr class="table-success">
+          <td>${obj.descripcion}</td> <td>${obj.reparacion == 0 ? "No" : "Si"}</td> <td>${obj.aula}</td> <td>${obj.planta == 0 ? "Planta baja" : "Planta "+obj.planta}</td> <td>${obj.tipoConexion}</td> <td>${obj.direccionIP == "" ? "---------" : obj.direccionIP}</td> <td>${obj.consumo}</td>  
+          <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.dispositivoID}","${obj.tipoConexion}","${obj.descID}","${obj.reparacion}","${obj.planta}","${obj.aula}","${obj.direccionIP}","${obj.numeroDispArduino}","${obj.consumo}")'>Modificar</button>
           <button class="btn btn-danger" onclick="eliminarDispositivo(${obj.dispositivoID})">Eliminar</button></td> </tr>`;
   }
   document.querySelector("#tablaDia").innerHTML = registroHTML;
@@ -83,7 +83,7 @@ async function agregarDispositivo() {
     "jurisdiccion": jurisdiccion
   };
  
-  await fetch("http://localhost:4009/api/dispositivos", {
+  await fetch("https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ async function agregarDispositivo() {
   });
   listar(0, 0, -1);
 
-  const getID = await fetch("http://localhost:4009/api/dispositivos/getID");
+  const getID = await fetch("https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/getID");
   const nuevoID = await getID.json();
 
   const token = await obtenerToken();
@@ -103,6 +103,14 @@ async function agregarDispositivo() {
       "idArea": zona.value
     };
 
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Agregado con éxito',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
   await fetch('https://pp1.ath.cx/api/Device', { 
     method: 'POST', 
     headers: { 
@@ -112,6 +120,8 @@ async function agregarDispositivo() {
     }, 
     body: JSON.stringify(datos),
   });
+  await delay(1.5);
+  ActualizarPagina();
 }
 
 async function eliminarDispositivo(id) {
@@ -125,18 +135,10 @@ async function eliminarDispositivo(id) {
     cancelButtonText: "Cancelar",
     confirmButtonText: 'Si, Eliminar!'
   }).then(async (result) => {
-    await fetch("http://localhost:4009/api/dispositivos/" + id, {
+    await fetch("https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/" + id, {
       method: 'DELETE'
     });
 
-    if (result.isConfirmed) {
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Eliminado con éxito',
-        showConfirmButton: false,
-      })
-      listar(0, 0, -1);
 
       const token = await obtenerToken();
       fetch('https://pp1.ath.cx/api/Device/' + id, { 
@@ -144,14 +146,27 @@ async function eliminarDispositivo(id) {
         headers: { 
           'Authorization' : 'Bearer ' + token
         }, 
-      });
+      }
+      
+      )
+      if (result.isConfirmed) {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Eliminado con éxito',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        await delay(1.5);
+        ActualizarPagina();
+      }
     }
-  })
+  )
 }
-
+  
 function editar(id, conexion, descripcion, reparacion, piso, aula, ip, ard, consumo) {
   //setea todos los elementos del modal editar
-  conexion = (conexion == "Electrico" ? 1 : conexion == "Señal" ? 2 : 3);
+  conexion = (conexion == "Electrico" ? 1 : conexion == "Señal" ? 2 : conexion == "Manual" ? 3 : 4);
 
   document.getElementById("editarTipoConexion").value = conexion;
   document.getElementById("editarTipoDispositivo").value = descripcion;
@@ -194,11 +209,32 @@ async function editarDispositivo() {
   var consumo = document.getElementById("editar-consumo").value;
   var nombre;
 
+  if(  document.getElementById("editar-consumo").value==""){
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'Falta llenar el consumo esperado.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })
+    return;
+  }else{
+    if(  document.getElementById("editar-consumo").value<=0){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de ingreso de datos!',
+        text: 'El consumo tiene que ser mayor o igual 0.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#1B9752',
+      })
+      return;
+    }
   if (conexion == 3){
     nombre = descripcion.options[descripcion.selectedIndex].text + " " + zona.options[zona.selectedIndex].text;
   } else {
     nombre = IP+numArduino;
   }
+}
 
   const data = {
     "tipoConexion": conexion,
@@ -215,7 +251,7 @@ async function editarDispositivo() {
     "jurisdiccion": jurisdiccion
   };
 
-  await fetch("http://localhost:4009/api/dispositivos/" + idEditar, {
+  await fetch("https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/" + idEditar, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -232,6 +268,13 @@ async function editarDispositivo() {
       "idArea": zona.value
     };
 
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Modificado con éxito',
+      showConfirmButton: false,
+      timer: 1500,
+    });
   await fetch('https://pp1.ath.cx/api/Device', { 
     method: 'POST', 
     headers: { 
@@ -240,11 +283,14 @@ async function editarDispositivo() {
       'Cookie': 'metabase.DEVICE=70cfdbee-2e86-4447-85e7-7bbe7a4f799c'
     }, 
     body: JSON.stringify(datos),
+    
   });
+  await delay(1.5);
+
 }
 
 async function cargarCombo() {
-  var res = await fetch("http://localhost:4001/api/descripciones");
+  var res = await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones");
   var registroHTML = "";
   var data = await res.json();
 
@@ -321,6 +367,15 @@ async function obtenerToken() {
   }
 }
 
+function delay(n) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, n * 1000);
+  });
+}
+
+function ActualizarPagina() {
+  location.reload();
+}
 buscarButton.addEventListener("click", callApi);
 guardarButton.addEventListener("click", agregarDispositivo);
 editarButton.addEventListener("click", editarDispositivo);

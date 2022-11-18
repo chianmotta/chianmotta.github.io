@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Manzana Isaac - Home</title>
+  <title>Manzana Isaac - Historial de acciones</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link rel="stylesheet" href="Style/style.css">
@@ -12,7 +12,7 @@
 
 <body id="body">
   <nav class="navbar navbar-dark bg-dark" >
-    <span class="text-white ms-1 d-none d-sm-inline" id="spanInfo"> </span>
+    <span class="text-white ms-1 d-none d-sm-inline" >Manzana de ISAAC </span>
   </nav>
    <!--div class="container"-->
    <div class="container-fluid">
@@ -107,68 +107,53 @@
                 
             </div>
         </div>
+        
           
     <div class="container col py-3">
+      
+      <h1>Registro de Operaciones</h1>
+
+      <p></p>
+
+      <label for="exampleFormControlInput1" class="form-label">Buscar operación por horario      |         </label>      
+      <label for="appt-time">Horario inicial: </label>
+      <input id="appt-time_inicial" type="time" name="appt-time" />        
+      <label for="appt-time">Horario limite: </label>
+      <input  id="appt-time_limite" type="time" name="appt-time" />   
+
+      <p></p>
+    
+      <label for="exampleFormControlInput1" class="form-label">Buscar operación por fecha |</label>
+      <label for="start">Fecha Inicio :</label>
+      <input type="Date" name="fecha_inicio" id="fecha_inicio" >
+      <input type="Date" name="fecha_fin" id="fecha_fin" >
+    
+      <p></p>
+
+      <button button onclick="Buscar()" type="button" class="btn btn-success" >Buscar</button>
+
+      <p></p>
+      
+      <h2>Operaciones</h2>
+      <hr/>      
+        <table class="table table-bordered table-striped" >      
+        <thead>
+          <tr>          
+            <th scope="col">ID</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Acción</th>
+            <th scope="col">Objetivo</th>
+            <th scope="col">Tipo de dato</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Dispositivo</th>
+            <th scope="col">Planta</th>
+            <th scope="col">Aula</th>              
+          </tr>
+        </thead>
+
+        <tbody id="Escritura" class="tabla"></tbody>
         
-    <!--<img src="/WEB-Ahorro-de-Energia/img/backgroundHome.png" alt=""> -->
-    
-    <h1>Ayuda</h1>
-
-    <hr style="color:grey;" />
-
-    <div class="informacion">
-      <img src="icons/funcionamiento3.png" class="logosAyuda">    
-      <h4 class="tituloAyuda">¿Para qué es la web?</h4>
-      <p class="infoAyuda">La idea de esta web es que el usuario pueda controlar todo el sistema a partir de la interfaz, a continuacion se explican las principales secciones que posee el modulo de ahorro energetico. </p>
-    </div>
-
-    <hr style="color:grey;" />
-    
-    <div class="informacion">
-      <img src="icons/dispositivo.png"class="logosAyuda">
-      <h4 class="tituloAyuda">Dispositivos</h4>
-      <p class="infoAyuda">Esta sección se encarga de otorgar a acceso a agregar,eliminar y modificar diferentes dispositivos y categorias junto a la busqueda de los cargados en sistema a través de diferentes filtros. Un dispositivo corresponde a una categoría particular.</p>
-    </div>
-    <hr style="color:grey;" />
-    <div class="informacion">
-     <img src="icons/acciones.png"class="logosAyuda">
-     <h4 class="tituloAyuda">Acciones del sistema</h4>
-     <p class="infoAyuda">Esta sección es solamente para configurar el accionar del sistema hacia los dispositivos y también ver su comportamiento a lo largo del tiempo.</p>             
-    </div>
-    <hr style="color:grey;" />
-    <div class="informacion">
-     <img src="icons/perfiles.png"class="logosAyuda">
-     <h4 class="tituloAyuda">Perfiles</h4>    
-     <p class="infoAyuda">Esta sección otorga acceso a la configuración de los distintos perfiles, ya sea por día o por evento. El perfil por día está destinado al funcionamiento a partir de un cronograma y el perfil por evento está destinado a trabajar a partir de circunstancias donde se toma en cuenta un día festivo o feriado donde el sistema debe actuar o no sin importar del perfil por dia referente a esa fecha.</p>
-    </div>
-    <hr style="color:grey;" />
-    <div class="informacion">
-    <img src="icons/recomendar.png"class="logosAyuda">
-     <h4 class="tituloAyuda">Recomendaciones</h4>
-     <p class="infoAyuda">Esta sección  está destinada a la gestión de recomendaciones a partir de distintas categorias de dispositivo donde cada una representa una propuesta de ahorro energetico o cuidado de los mismos. Las recomendaciones son importantes a tener en cuenta y estas mismas van a ser incluidas en el boletín para brindar difusión de las iniciativas de concientización.</p>
-    </div>
-    <hr style="color:grey;" />
-    <div class="informacion">
-     <img src="icons/solicitud.png"class="logosAyuda">
-     <h4 class="tituloAyuda">Solicitudes</h4>
-     <p class="infoAyuda">En esta sección se permite aceptar o rechazar recomendaciones de los alumnos con respecto a una categoria en especial y también recibir informes de dispostivos rotos que los alumnos envien, en caso de aceptarse, se actualiza el dispositivo en estado roto para que el sistema siga continuando su funcionamiento según la disponibilidad que tenga.</p>
-    </div>
-    <hr style="color:grey;" />
-    <div class="informacion">
-     <img src="icons/meta.png"class="logosAyuda">
-     <h4 class="tituloAyuda">Metas</h4>
-     <p class="infoAyuda">Esta sección está destinada a fijar objetivos en cuanto a consumo energetico de cada categoría de dispositivo, se espera que cada categoría tenga un consumo menor o igual al cargado en la meta. Una vez pasa el tiempo de vigencia, la meta actualiza su fecha sola si es que no se cambia, también permite su modificación de consumo esperado. No se pueden tener mas de una meta vigente por categoría. Dentro de metas está la sección de metas historicas donde se guarda el historial de las anteriores y se puede ver el objetivo de consumo que tuvo en las fechas que tuvo vigencia dicha meta.</p>
-    </div>
-    <hr style="color:grey;" />
-    <div class="informacion">
-     <img src="icons/notificacion.png"class="logosAyuda">
-     <h4 class="tituloAyuda">Notificaciones</h4>
-     <p class="infoAyuda">Esta sección se encarga de la gestión de numeros telefonicos de las personas que van a recibir notificaciones tanto de mantenimiento o alertas importantes.</p>
-    </div>
-
-     
-    
-    
+      </table>
 
 
   
@@ -176,12 +161,11 @@
 </div> <!--/div MENU-->
 </div>   <!--/div MENU-->
 
+<!--MODALES -->
 
+<script src="./JS/logOperaciones.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-  crossorigin="anonymous"></script>
-  <script src="JS/ayuda.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>
 
 </html>

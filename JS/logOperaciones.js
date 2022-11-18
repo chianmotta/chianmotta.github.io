@@ -26,7 +26,7 @@ function Buscar(){
   let HoraIni = document.getElementById("appt-time_inicial").value
 
 
-  fetch('http://localhost:4008/api/logAcciones/0')
+  fetch('https://ahorro-energetico-api-log.herokuapp.com/api/logAcciones/0')
   .then((res) => res.json())
   .then(async (data) => {
         indice.innerHTML ="";
@@ -56,7 +56,7 @@ function Buscar(){
 
 
 function cargarRows(){
-    fetch('http://localhost:4008/api/logAcciones/0')
+    fetch('https://ahorro-energetico-api-log.herokuapp.com/api/logAcciones/0')
       .then((res) => res.json())
       .then(async (data) => {
             indice.innerHTML ="";

@@ -111,6 +111,12 @@ body {
 	background: #1b9752 ;
     border-color: #1b9752;
 }
+.btn-danger
+{
+	color: #fff;
+	background:#D64455;
+	border-color:#D64455;
+}
 
 	.img{
 		margin:10px auto;
@@ -180,6 +186,35 @@ hr {
 .logo{
 	margin-left: 2rem;
 }
+.logosAyuda
+{
+	float:left;
+	height:5% ;
+	width:5%;
+}
+.tituloAyuda
+{
+margin-left: 8%;
+}
+.infoAyuda
+{
+	margin-left: 8%;
+}
+.informacion
+{
+	margin-left: 1%;
+	margin-top: 1.5%;
+	margin-bottom: 1.5%;
+}
+
+.imgPrincipal
+{
+	width:30%;
+	height:30%;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
 /* MENU STYLE
 .container2{
 font: 1em 'Segoe UI','Century Gothic';

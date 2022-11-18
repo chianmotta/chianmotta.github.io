@@ -14,16 +14,16 @@ document.body.onload = () => {
     document.getElementById(
       "spanInfo"
     ).innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
-    listar();
   } else {
     institucionGlobal = "La manzana de isaac";
-    listar();
+    
   }
+  listar();
 };
 
 function listar() {
   fetch(
-    "http://localhost:4017/api/contactoEmergencia?institucion=La manzana de isaac"
+    "https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac"
   )
     .then((res) => res.json())
     .then(async (data) => {
@@ -35,7 +35,7 @@ function listar() {
                       <td>${dat.telefono}</td>
 
                       <td>${dat.tipoEmergencia}</td>
-                      <td> <button type="button" onclick='editar("${dat.id}","${dat.nombre}","${dat.telefono}","${dat.tipoEmergencia}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar">Modificar</button>
+                      <td> <button type="button" onclick='editar("${dat.id}","${dat.nombre}","${dat.telefono}","${dat.tipoEmergencia}")'  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar">Editar</button>
                       
                       <button type="button" onclick='EliminarAccion("${dat.id}")' class="btn btn-danger">Eliminar</button></td>
                     </tr>`;
@@ -45,7 +45,7 @@ function listar() {
 
 function EliminarAccion(Id) {
   fetch(
-    " http://localhost:4017/api/contactoEmergencia?institucion=La manzana de isaac&id=" +
+    " https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
       Id,
     {
       method: "DELETE",
@@ -71,7 +71,7 @@ function editar(id, nombre, telefono, tipoEmergencia) {
 async function editarContacto() {
   console.log("llego acacacaca");
   await fetch(
-    "http://localhost:4017/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
+    "https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
       idEditar,
     {
       method: "PUT",
@@ -96,7 +96,7 @@ async function agregarContactoNuevo() {
     alert("Todos los campos son requerido");
   } else {
     await fetch(
-      "http://localhost:4017/api/contactoEmergencia?institucion=La manzana de isaac",
+      "https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac",
       {
         method: "POST",
         headers: {

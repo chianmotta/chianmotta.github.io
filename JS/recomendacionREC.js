@@ -21,7 +21,7 @@ document.body.onload = () => {
 
 
 async function BoxDispositivo(){
-    await fetch("http://localhost:4001/api/descripciones")
+    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones")
     .then((res) => res.json())
     .then(async (data) => {
         comboBoxDispositivo.innerHTML ="";
