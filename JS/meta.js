@@ -112,8 +112,8 @@ async function AgregarMeta() {
       confirmButtonColor: "#1B9752",
     });
     return;
-  } else {
-    if (consumo <= 0) {
+  } 
+  if (consumo <= 0) {
       Swal.fire({
         icon: "error",
         title: "Error de ingreso de datos!",
@@ -123,7 +123,7 @@ async function AgregarMeta() {
       });
       return;
     }
-    if (fechaDesde >= fechaHasta) {
+  if (fechaDesde >= fechaHasta) {
       Swal.fire({
         icon: "error",
         title: "Error de ingreso de datos!",
@@ -132,8 +132,8 @@ async function AgregarMeta() {
         confirmButtonColor: "#1B9752",
       });
       return;
-    } else {
-      await fetch("https://ahorro-energetico-api-meta.herokuapp.com/api/meta", {
+    } 
+  await fetch("https://ahorro-energetico-api-meta.herokuapp.com/api/meta", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,18 +146,27 @@ async function AgregarMeta() {
           institucion: institucionGlobal,
           jurisdiccion: jurisdiccion,
         }),
-      });
-
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Añadido con éxito",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      listar(0);
-    }
-  }
+      }).then(result => {
+        if (result.ok) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Accion guardada con éxito',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al guardar',
+            text: 'Intente mas tarde',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#1B9752',
+          })
+        }
+      })
+    listar(0);
+ 
 }
 
 function editar(id, fechaDesde, fechaHasta, consumo) {
@@ -180,7 +189,8 @@ async function Modificar() {
       confirmButtonText: "Aceptar",
       confirmButtonColor: "#1B9752",
     });
-  } else {
+    return;
+  } 
     if (consumo <= 0) {
       Swal.fire({
         icon: "error",
@@ -189,7 +199,8 @@ async function Modificar() {
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#1B9752",
       });
-    } else {
+      return;
+    } 
       console.log(fechaHasta, fechaDesde, consumo, idEditar);
       await fetch(
         "https://ahorro-energetico-api-meta.herokuapp.com/api/meta/?id=" +
@@ -208,19 +219,27 @@ async function Modificar() {
             institucion: institucionGlobal,
           }),
         }
-      );
-
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Modificado con éxito",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      ).then(result => {
+        if (result.ok) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Accion guardada con éxito',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al guardar',
+            text: 'Intente mas tarde',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#1B9752',
+          })
+        }
+      })
       listar(0);
     }
-  }
-}
 
 async function cargarCombo() {
   var res = await fetch(

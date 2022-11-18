@@ -30,7 +30,7 @@
                 <hr style="color:white" width="70%">
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link align-middle px-0">
+                        <a href="home.html" class="nav-link align-middle px-0">
                             <i class="fs-4 bi-house"></i> <span class=" text-white ms-1 d-none d-sm-inline">Home</span>
                         </a>
                     </li>       
@@ -177,9 +177,9 @@
         
         <br></br>
         <label for="start">Fecha inicio:</label>
-        <input type="date" id="Addstart" name="trip-start" onchange="validarFecha(this,Addfinished)">
+        <input type="date" id="Addstart" name="trip-start">
         <label for="start">Fecha fin:</label>
-        <input type="date" id="Addfinished" name="trip-start" onchange="validarFecha(Addstart,this)"/>
+        <input type="date" id="Addfinished" name="trip-start"/>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -210,7 +210,7 @@
   <input type="date" id="inicio" name="trip-start" value="" disabled = true>
 
   <label for="start">Fecha fin:</label>
-  <input type="date" id="finished" name="trip-start" value="" onchange="validarFecha(inicio,this)">
+  <input type="date" id="finished" name="trip-start" value="">
 
       </div>
       <div class="modal-footer">
