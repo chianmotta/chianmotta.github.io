@@ -124,14 +124,18 @@ async function editarPerfilEvento() {
 }
 
 function format(dato) {
+  console.log(`Format entrada: ${dato}`);
   const date = new Date(dato);
   const [year, month, day] = [date.getFullYear(), date.getMonth()+1, date.getDate()];
+  console.log(`Format salida: ${day.toString().padStart(2, '0') + "-" + month.toString().padStart(2, '0') + "-" + year}`)
   return day.toString().padStart(2, '0') + "-" + month.toString().padStart(2, '0') + "-" + year;
 }
 
 function formatoInvertido(dato) {
+  console.log(`Formato invertido entrada ${dato} `)
   const date = new Date(dato);
   const [year, month, day] = [date.getFullYear(), date.getMonth()+1, date.getDate()];
+  console.log(`Formato invertido salida ${year + "-" + month.toString().padStart(2, '0') + "-" + day.toString().padStart(2, '0')} `)
   return year + "-" + month.toString().padStart(2, '0') + "-" + day.toString().padStart(2, '0');
 }
 
