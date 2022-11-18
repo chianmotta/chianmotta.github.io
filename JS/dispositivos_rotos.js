@@ -1,5 +1,3 @@
-
-
 const buscarButton = document.getElementById("but");
 var indice = document.getElementById("Registros");
 var idEditar;
@@ -16,7 +14,7 @@ document.body.onload = () => {
       "spanInfo"
     ).innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
   } else {
-    institucionGlobal = "La manzana de isaac";
+    institucionGlobal = "La Manzana de Isaac";
   }
   cargarCombo();
   ListarRegistros();
@@ -30,7 +28,9 @@ async function ListarRegistros() {
       indice.innerHTML = "";
       for (var i = 0; i < data.length; i++) {
         var NombreDispositivo;
-        var sql = "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" + data[i].id;
+        var sql =
+          "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" +
+          data[i].id;
         await fetch(sql)
           .then((res) => res.json())
           .then(async (descripcionData) => {
@@ -60,19 +60,31 @@ async function listar(tipoConexion, descripcion) {
 
   for (var i = 0; i < data.length; i++) {
     var obj = data[i];
-    registroHTML += `<tr class="table-success"><th scope="row">${obj.dispositivoID}</th> 
-          <td>${obj.descripcion}</td> <td>${obj.reparacion == 0 ? "No" : "Si"}</td> <td>${obj.aula}</td> <td>${obj.planta}</td> 
-          <td>${obj.tipoConexion}</td> <td>${obj.direccionIP == "" ? "---------" : obj.direccionIP}</td> <td>${obj.consumo}</td>  
+    registroHTML += `<tr class="table-success"><th scope="row">${
+      obj.dispositivoID
+    }</th> 
+          <td>${obj.descripcion}</td> <td>${
+      obj.reparacion == 0 ? "No" : "Si"
+    }</td> <td>${obj.aula}</td> <td>${obj.planta}</td> 
+          <td>${obj.tipoConexion}</td> <td>${
+      obj.direccionIP == "" ? "---------" : obj.direccionIP
+    }</td> <td>${obj.consumo}</td>  
           <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" 
-          onclick='editar("${obj.dispositivoID}","${obj.tipoConexion}","${obj.descID}","${obj.reparacion}","${obj.planta}","${obj.aula}","${obj.direccionIP}","${obj.numeroDispArduino}","${obj.consumo}")'>Editar</button>
-          <button class="btn btn-danger" onclick="eliminarDispositivo(${obj.dispositivoID})">Eliminar</button></td> </tr>`;
+          onclick='editar("${obj.dispositivoID}","${obj.tipoConexion}","${
+      obj.descID
+    }","${obj.reparacion}","${obj.planta}","${obj.aula}","${
+      obj.direccionIP
+    }","${obj.numeroDispArduino}","${obj.consumo}")'>Editar</button>
+          <button class="btn btn-danger" onclick="eliminarDispositivo(${
+            obj.dispositivoID
+          })">Eliminar</button></td> </tr>`;
   }
   document.querySelector("#Registros").innerHTML = registroHTML;
 }
 
 function cargarZonas(select, combo) {
   var zonas = "";
- 
+
   for (var i = 0; i < zonasGlobales[select].length; i++) {
     //console.log(zonasGlobales[select][i][1]);
     zonas += `<option>${zonasGlobales[select][i][1]}</option>`;
@@ -101,7 +113,9 @@ async function cargarDispositivosZona() {
   try {
     res = await fetch(
       "https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/descripcion/?zona=" +
-        zona.options[zona.selectedIndex].text + "&planta=" + planta
+        zona.options[zona.selectedIndex].text +
+        "&planta=" +
+        planta
     );
     data = await res.json();
     //console.log(data);
@@ -117,59 +131,57 @@ async function cargarDispositivosZona() {
 
 async function guardarDispositivoRoto() {
   Swal.fire({
-    title: '¿Desea reportar que este dispositivo esta roto?',
-    icon: 'question',
+    title: "¿Desea reportar que este dispositivo esta roto?",
+    icon: "question",
     showCancelButton: true,
-    confirmButtonColor: '#1B9752',
-    cancelButtonColor: '#d33',
+    confirmButtonColor: "#1B9752",
+    cancelButtonColor: "#d33",
     cancelButtonText: "Cancelar",
-    confirmButtonText: 'Si, Agregar!'
+    confirmButtonText: "Si, Agregar!",
   }).then(async (result) => {
-    
-  //me pide guardar la descID(✓), planta(✓), institucion(X), aula(✓), nombre(✓), nombreAlumno(X)
-  var dispositivoID = document.getElementById("comboTipoDispositivo").value;
-  var planta = document.getElementById("editarPiso").value;
+    //me pide guardar la descID(✓), planta(✓), institucion(X), aula(✓), nombre(✓), nombreAlumno(X)
+    var dispositivoID = document.getElementById("comboTipoDispositivo").value;
+    var planta = document.getElementById("editarPiso").value;
 
-  console.log(document.getElementById("editarZona"));
+    console.log(document.getElementById("editarZona"));
 
-  res = await fetch(
-    "https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/get/" + dispositivoID
-  );
-  data = await res.json();
-  const rp = {
-    descID: data[0].descID,
-    planta: planta,
-    aula:  document.getElementById("editarZona").value,
-    nombre: data[0].nombre,
-    nombreAlumno: sessionStorage.getItem("usuario"),
-    institucion: institucionGlobal
-  };
-  
-  var sql = "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion=la manzana de isaac"
- 
-  await fetch(sql, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    res = await fetch(
+      "https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/get/" +
+        dispositivoID
+    );
+    data = await res.json();
+    const rp = {
+      descID: data[0].descID,
+      planta: planta,
+      aula: document.getElementById("editarZona").value,
+      nombre: data[0].nombre,
+      nombreAlumno: sessionStorage.getItem("usuario"),
+      institucion: institucionGlobal,
+    };
+
+    var sql =
+      "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion=la manzana de isaac";
+
+    await fetch(sql, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(rp),
-    }
-  )
+    });
 
     if (result.isConfirmed) {
       Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Añadido con éxito',
+        position: "center",
+        icon: "success",
+        title: "Añadido con éxito",
         showConfirmButton: false,
-        timer: 1500
-      })
+        timer: 1500,
+      });
     }
     ListarRegistros();
-  }
-  )
+  });
 }
-
 
 function delay(n) {
   return new Promise(function (resolve) {
@@ -181,14 +193,14 @@ function ActualizarPagina() {
   ListarRegistros();
 }
 async function ListarRegistros() {
-  sql = "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion=la manzana de isaac"
+  sql =
+    "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion=la manzana de isaac";
   await fetch(sql)
     .then((res) => res.json())
     .then(async (data) => {
       indice.innerHTML = "";
       for (var i = 0; i < data.length; i++) {
-  
-            indice.innerHTML += `
+        indice.innerHTML += `
                           <tr class="table-success">
                           <td>${data[i].descripcion}</td>
                           <td>${data[i].planta}</td>
@@ -199,5 +211,4 @@ async function ListarRegistros() {
                           `;
       }
     });
-
 }

@@ -15,8 +15,7 @@ document.body.onload = () => {
       "spanInfo"
     ).innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
   } else {
-    institucionGlobal = "La manzana de isaac";
-    
+    institucionGlobal = "La Manzana de Isaac";
   }
   listar();
 };
@@ -53,12 +52,8 @@ function EliminarAccion(Id) {
   )
     .then((res) => res.json())
     .then((res) => {
-      ActualizarPagina();
+      listar();
     });
-}
-
-function ActualizarPagina() {
-  location.reload();
 }
 
 function editar(id, nombre, telefono, tipoEmergencia) {
@@ -69,7 +64,6 @@ function editar(id, nombre, telefono, tipoEmergencia) {
 }
 
 async function editarContacto() {
-  console.log("llego acacacaca");
   await fetch(
     "https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
       idEditar,

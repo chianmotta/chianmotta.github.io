@@ -1,10 +1,9 @@
-
-    var institucionGlobal;
-    var usuarioGlobal;
-    var categoriaGlobal;
+var institucionGlobal;
+var usuarioGlobal;
+var categoriaGlobal;
     
 document.body.onload = () => {
-    Listar();
+   
     if (sessionStorage.getItem('institucion'))
     {
       categoriaGlobal= sessionStorage.getItem('categoria')
@@ -14,9 +13,9 @@ document.body.onload = () => {
       document.getElementById("spanInfo").innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`
     }
     else{
-      institucionGlobal = "La manzana de isaac";
+      institucionGlobal = "La Manzana de Isaac";
     }
-
+ Listar();
   }
 
 var indice = document.getElementById("Registros");

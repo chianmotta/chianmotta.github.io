@@ -5,23 +5,22 @@ var idEditar;
 var institucionGlobal;
 var usuarioGlobal;
 var categoriaGlobal;
-const jurisdiccion = "Ciudad Autonoma de Buenos Aires"; 
+const jurisdiccion = "Ciudad Autonoma de Buenos Aires";
 
 document.body.onload = () => {
-  if (sessionStorage.getItem('institucion'))
-  {
-    categoriaGlobal= sessionStorage.getItem('categoria')
+  if (sessionStorage.getItem("institucion")) {
+    categoriaGlobal = sessionStorage.getItem("categoria");
     institucionGlobal = sessionStorage.getItem("institucion");
-    usuarioGlobal = sessionStorage.getItem('usuario');
-    console.log(institucionGlobal,usuarioGlobal);
-    document.getElementById("spanInfo").innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`
-  }
-  else{
-    institucionGlobal = "La manzana de isaac";
-    
+    usuarioGlobal = sessionStorage.getItem("usuario");
+    console.log(institucionGlobal, usuarioGlobal);
+    document.getElementById(
+      "spanInfo"
+    ).innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
+  } else {
+    institucionGlobal = "La Manzana de Isaac";
   }
   listar("");
-}
+};
 
 const callApi = () => {
   descripcion = document.getElementById("descripcion").value;
@@ -33,14 +32,18 @@ const callApi = () => {
 };
 
 async function listar(descripcion) {
-  var res = await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" + descripcion + "&institucion=" + institucionGlobal)
+  var res = await fetch(
+    "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" +
+      descripcion +
+      "&institucion=" +
+      institucionGlobal
+  );
   var registroHTML = "";
   var data = await res.json();
 
   for (var i = 0; i < data.length; i++) {
     var obj = data[i];
-    registroHTML +=
-      `<tr class="table-success"><td>${obj.descripcion}</td>
+    registroHTML += `<tr class="table-success"><td>${obj.descripcion}</td>
         <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalEditar" onclick='editar("${obj.id}","${obj.descripcion}")'>Editar</button>
         <button class="btn btn-danger" onclick="eliminarDescripcion(${obj.id})">Eliminar</button></td></tr>`;
   }
@@ -49,29 +52,33 @@ async function listar(descripcion) {
 
 async function eliminarDescripcion(id) {
   Swal.fire({
-    title: '¿Está seguro, que desea eliminar esta categoria?',
+    title: "¿Está seguro, que desea eliminar esta categoria?",
     text: "¡No podrás revertir esto!",
-    icon: 'warning',
+    icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: '#1B9752',
-    cancelButtonColor: '#d33',
+    confirmButtonColor: "#1B9752",
+    cancelButtonColor: "#d33",
     cancelButtonText: "Cancelar",
-    confirmButtonText: 'Si, Eliminar!'
+    confirmButtonText: "Si, Eliminar!",
   }).then(async (result) => {
-    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" + id, {
-      method: 'DELETE',
-    });
+    await fetch(
+      "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" +
+        id,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (result.isConfirmed) {
       Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Eliminado con éxito',
+        position: "center",
+        icon: "success",
+        title: "Eliminado con éxito",
         showConfirmButton: false,
-      })
-      listar('')
+      });
+      listar("");
     }
-  })
+  });
 }
 
 function editar(id, descripcion) {
@@ -81,83 +88,79 @@ function editar(id, descripcion) {
 }
 
 async function editarDescripcion() {
-  const descripcion = document.getElementById("recipiente-editar").value
-  if (descripcion=="" || descripcion==undefined){
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de ingreso de datos!',
-        text: 'Ingrese la descripción.',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#1B9752',
-      })
-      return;
-    }
-  else{
-    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" + idEditar, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        "descripcion": descripcion,
-        "institucion": institucionGlobal,
-        "jurisdiccion": jurisdiccion
-      }),
-    })
+  const descripcion = document.getElementById("recipiente-editar").value;
+  if (descripcion == "" || descripcion == undefined) {
     Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Modificado con éxito',
+      icon: "error",
+      title: "Error de ingreso de datos!",
+      text: "Ingrese la descripción.",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#1B9752",
+    });
+    return;
+  } else {
+    await fetch(
+      "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" +
+        idEditar,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          descripcion: descripcion,
+          institucion: institucionGlobal,
+          jurisdiccion: jurisdiccion,
+        }),
+      }
+    );
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Modificado con éxito",
       showConfirmButton: false,
       timer: 1500,
     });
-    listar('')
+    listar("");
   }
 }
 
 async function agregarDescripcion() {
   var recipiente = document.getElementById("recipiente-agregar").value;
-  
-  if (recipiente=="" || recipiente==undefined){
+
+  if (recipiente == "" || recipiente == undefined) {
     Swal.fire({
-      icon: 'error',
-      title: 'Error de ingreso de datos!',
-      text: 'Ingrese la descripción.',
-      confirmButtonText: 'Aceptar',
-      confirmButtonColor: '#1B9752',
-    })
-    return;
-  }else{
-    await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        "descripcion": recipiente, 
-        "institucion": institucionGlobal,
-        "jurisdiccion": jurisdiccion
-      }),
+      icon: "error",
+      title: "Error de ingreso de datos!",
+      text: "Ingrese la descripción.",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#1B9752",
     });
+    return;
+  } else {
+    await fetch(
+      "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          descripcion: recipiente,
+          institucion: institucionGlobal,
+          jurisdiccion: jurisdiccion,
+        }),
+      }
+    );
     Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Añadido con éxito',
+      position: "center",
+      icon: "success",
+      title: "Añadido con éxito",
       showConfirmButton: false,
       timer: 1500,
     });
-    listar('');
+    listar("");
   }
-}
-
-function delay(n) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, n * 1000);
-  });
-}
-
-function ActualizarPagina() {
-  location.reload();
 }
 
 apiButton.addEventListener("click", callApi);

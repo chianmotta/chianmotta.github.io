@@ -4,8 +4,6 @@ var usuarioGlobal;
 var categoriaGlobal;
 
 document.body.onload = () => {
-  Listar();
-  BoxDispositivo();
   if (sessionStorage.getItem("institucion")) {
     categoriaGlobal = sessionStorage.getItem("categoria");
     institucionGlobal = sessionStorage.getItem("institucion");
@@ -15,12 +13,16 @@ document.body.onload = () => {
       "spanInfo"
     ).innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
   } else {
-    institucionGlobal = "La manzana de isaac";
+    institucionGlobal = "La Manzana de Isaac";
   }
+  Listar();
+  BoxDispositivo();
 };
 
 async function BoxDispositivo() {
-  var res = await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones");
+  var res = await fetch(
+    "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones"
+  );
   var data = await res.json();
   var registroHTML = "";
 
@@ -77,7 +79,8 @@ function actualizarGrafico() {
 async function AceptarRecomendacion(id, descID, recomendacion) {
   console.log(id, descID, recomendacion, institucionGlobal);
   await fetch(
-    "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/" + id,
+    "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/" +
+      id,
     {
       method: "PUT",
       headers: {
@@ -114,7 +117,9 @@ async function RechazarRecomendacion(id) {
     confirmButtonText: "Si, Eliminar!",
   }).then(async (result) => {
     await fetch(
-      "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion="+institucionGlobal+"&id=" +
+      "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion=" +
+        institucionGlobal +
+        "&id=" +
         id,
       {
         method: "DELETE",
@@ -135,7 +140,8 @@ async function RechazarRecomendacion(id) {
 }
 async function Listar() {
   await fetch(
-    "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion=" + institucionGlobal
+    "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion=" +
+      institucionGlobal
   )
     .then((res) => res.json())
     .then(async (data) => {

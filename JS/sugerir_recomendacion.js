@@ -14,10 +14,11 @@ document.body.onload = () => {
   } else {
     institucionGlobal = "La manzana de isaac";
   }
-  sql =
+	sql =
     "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion=" +
     institucionGlobal;
   Listar();
+  
 };
 
 async function Listar() {

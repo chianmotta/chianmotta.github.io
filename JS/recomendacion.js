@@ -19,7 +19,7 @@ document.body.onload = () => {
     document.getElementById("spanInfo").innerHTML = `Bienvenido ${usuarioGlobal} - ${institucionGlobal}`;
   }
   else{
-    institucionGlobal = "La manzana de isaac";
+    institucionGlobal = "La Manzana de Isaac";
   }
   Listar ("");
   BoxDispositivo();
@@ -48,6 +48,8 @@ async function Listar(descripcion) {
               
                     });
   }
+
+
 async function EliminarAccion(id){
     Swal.fire({
       title: '¿Está seguro, que desea eliminar esta recomendación?',
@@ -63,14 +65,13 @@ async function EliminarAccion(id){
         method: 'DELETE'})
       if (result.isConfirmed) {
         Swal.fire({
-          position: 'top-center',
+          position: 'center',
           icon: 'success',
           title: 'Eliminado con éxito',
           showConfirmButton: false,
           timer: 1500
         })
-        await delay(1.5);
-        ActualizarPagina();
+        Listar ("");
         
       }
     })
@@ -102,92 +103,89 @@ async function Buscar(){
 }
 
 async function agregarRecomendacion(){
-
-    
   descripcion = document.getElementById("ComboBoxNuevoDispositivo").value;
-  var url = "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" + descripcion
   var RecomendacionNueva =  document.getElementById("InputNuevaRecomendacion").value;
-  if(CondicionesDeAceptacion(RecomendacionNueva) == false){
+  if(!CondicionesDeAceptacion(RecomendacionNueva)){
     return;
   }
-  await fetch(url)
-  .then((res) => res.json())
-  .then(async (data) => {
-  var NuevaRecomendacionJSON = {
-      "descID": data[0].id,
-      "recomendacion": RecomendacionNueva,
-      "institucion": "La manzana de isaac",
-      "jurisdiccion": "Ciudad Autónoma de Buenos Aires"
-  }
-  JSONdata = JSON.stringify(NuevaRecomendacionJSON);
+
   await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSONdata,
-  })
-      Swal.fire({
-        position: 'top-center',
-        icon: 'success',
-        title: 'Añadido con éxito',
-        showConfirmButton: false,
-        timer: 1500
+    body: JSON.stringify({
+      "descID": descripcion,
+      "recomendacion": RecomendacionNueva,
+      "institucion": institucionGlobal,
+      "jurisdiccion": "Ciudad Autónoma de Buenos Aires"
       })
-      await delay(1.5);
-      ActualizarPagina();
-  })}
-function delay(n){
-  return new Promise(function(resolve){
-      setTimeout(resolve,n*1000);
-  });
-}
+    })
+    .then(result => {
+      if (result.ok) {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Recomendacion guardada con éxito',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al guardar',
+          text: 'Intente mas tarde',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#1B9752',
+        })
+      }
+    })
+  Listar ("");
+  }
 
 function ObtenerInformacionAnterior(id, recomendacion){
   console.log(recomendacion);
   idAnterior = id;
   document.getElementById("InputRecomendacion").value = recomendacion;
 }
+
 async function Modificar(){
- 
-    var RecomendacionNueva = document.getElementById("InputRecomendacion").value;
-    var data ={
-      "recomendacion": [
-        RecomendacionNueva
-      ]
-    }
-    if(CondicionesDeAceptacion(RecomendacionNueva)==false){
-      return;
-    }
-    const url  = "https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/?id="+ idAnterior + "&institucion=La manzana de isaac"
-    await fetch(url, {
-      method: 'PUT', // or 'PUT'
-      body: JSON.stringify(data), // data can be `string` or {object}!
-      headers:{
-        'Content-Type': 'application/json'
-      }
-    }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
-        Swal.fire({
-        position: 'top-center',
-        icon: 'success',
-        title: 'Modificado con éxito',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      await delay(1.5);
-      ActualizarPagina();
-    }
+  var RecomendacionNueva = document.getElementById("InputRecomendacion").value;
 
-
-function ActualizarPagina(){
-    Listar("");
+  if(!CondicionesDeAceptacion(RecomendacionNueva)){
+    return;
   }
 
+  await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/?id="+ idAnterior + "&institucion=" + institucionGlobal, {
+    method: 'PUT',
+    body: JSON.stringify({"recomendacion": RecomendacionNueva}), 
+    headers:{
+      'Content-Type': 'application/json'
+      }
+    })
+    .then(result => {
+      if (result.ok) {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Actualizado con éxito',
+          showConfirmButton: false,
+          timer: 1500,
+        })
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al actualizar',
+          text: 'Intente mas tarde',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#1B9752',
+        })
+      }
+    })
+  Listar ("");
+}
 
-  function CondicionesDeAceptacion(Recomendacion){
-   
+function CondicionesDeAceptacion(Recomendacion){
     if(Recomendacion == ""){
       Swal.fire({
         icon: 'error',
