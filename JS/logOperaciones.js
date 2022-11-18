@@ -44,7 +44,7 @@ function Buscar(){
                       <th scope="col">${data[i].objetivo}</th>
                       <th scope="col">${data[i].tipoDato}</th>
                         <th scope="col">${data[i].valor}</th>
-                        <th scope="col">${data[i].dispositivo}</th>
+                        <th scope="col">${data[i].nombre}</th>
                         <th scope="col">${data[i].planta}</th>
                         <th scope="col">${data[i].aula}</th>
                     </tr> `
@@ -71,7 +71,7 @@ function cargarRows(){
                           <th scope="col">${data[i].objetivo}</th>
                           <th scope="col">${data[i].tipoDato}</th>
                             <th scope="col">${data[i].valor}</th>
-                            <th scope="col">${data[i].dispositivo}</th>
+                            <th scope="col">${data[i].nombre}</th>
                             <th scope="col">${data[i].planta}</th>
                             <th scope="col">${data[i].aula}</th>
                         </tr> `

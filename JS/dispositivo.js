@@ -120,8 +120,7 @@ async function agregarDispositivo() {
     }, 
     body: JSON.stringify(datos),
   });
-  await delay(1.5);
-  ActualizarPagina();
+  listar(0, 0, -1);
 }
 
 async function eliminarDispositivo(id) {
@@ -157,8 +156,7 @@ async function eliminarDispositivo(id) {
           showConfirmButton: false,
           timer: 1500,
         });
-        await delay(1.5);
-        ActualizarPagina();
+        listar(0, 0, -1);
       }
     }
   )
@@ -285,7 +283,6 @@ async function editarDispositivo() {
     body: JSON.stringify(datos),
     
   });
-  await delay(1.5);
 
 }
 

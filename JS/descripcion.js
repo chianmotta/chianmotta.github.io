@@ -69,8 +69,7 @@ async function eliminarDescripcion(id) {
         title: 'Eliminado con éxito',
         showConfirmButton: false,
       })
-      await delay(1.5);
-      ActualizarPagina();
+      listar('')
     }
   })
 }
@@ -112,8 +111,7 @@ async function editarDescripcion() {
       showConfirmButton: false,
       timer: 1500,
     });
-    await delay(1.5);
-    ActualizarPagina();
+    listar('')
   }
 }
 
@@ -148,9 +146,7 @@ async function agregarDescripcion() {
       showConfirmButton: false,
       timer: 1500,
     });
-    await delay(1.5);
-    ActualizarPagina();
- 
+    listar('');
   }
 }
 

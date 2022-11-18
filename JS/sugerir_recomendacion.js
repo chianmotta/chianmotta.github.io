@@ -105,7 +105,7 @@ function ActualizarPagina() {
 
 async function BoxDispositivo() {
   var registroHTML = '<option value="0">----</option>';
-  await fetch("https://ahorro-energetico-api-criterio.herokuapp.com/api/descripciones")
+  await fetch("https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones")
     .then((res) => res.json())
     .then(async (data) => {
       ComboBoxDispositivo.innerHTML = "";
