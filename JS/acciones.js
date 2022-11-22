@@ -79,12 +79,12 @@ function ModAccion() {
         text: 'Intente mas tarde',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#1B9752',
+        timer: 1500,
       })
     }
     cargarRows(0, 0, 0);
   }).catch((error) => console.error("Error:", error));
   cargarRows(0, 0, 0);
-  
 }
 
 function CargarRowsCriterio() {
@@ -244,20 +244,22 @@ function EliminarAccion(Criterio, AccionAplicar, descId) {
     confirmButtonText: "Si, Eliminar!",
   })
     .then(async (result) => {
-      fetch(
-        "https://ahorro-energetico-api-accion.herokuapp.com/api/accion/?institucion=" +
-          institucionGlobal +
-          "&idCriterio=" +
-          Criterio +
-          "&accionAplicar=" +
-          AccionAplicar +
-          "&descId=" +
-          descId,
-        {
-          method: "DELETE",
-        }
-      );
+     
       if (result.isConfirmed) {
+        fetch(
+          "https://ahorro-energetico-api-accion.herokuapp.com/api/accion/?institucion=" +
+            institucionGlobal +
+            "&idCriterio=" +
+            Criterio +
+            "&accionAplicar=" +
+            AccionAplicar +
+            "&descId=" +
+            descId,
+          {
+            method: "DELETE",
+          }
+        );
+
         Swal.fire({
           position: "center",
           icon: "success",
@@ -265,10 +267,9 @@ function EliminarAccion(Criterio, AccionAplicar, descId) {
           showConfirmButton: false,
           timer: 1500,
         });
-        cargarRows(0, 0, 0);
       }
-      cargarRows(0, 0, 0);
-    })
+    });
+    setTimeout(() => { location. reload(); }, 2000);
 }
 
 function AgregarNuevaAccion() {
@@ -288,24 +289,17 @@ function AgregarNuevaAccion() {
     body: JSONdata,
   }).then(result => {
     if (result.ok) {
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Accion guardada con éxito',
+     Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Agregado con éxito",
         showConfirmButton: false,
         timer: 1500,
-      })
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al guardar',
-        text: 'Intente mas tarde',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#1B9752',
-      })
+      });
     }
-  cargarRows(0, 0, 0);  
-  }).catch((error) => {console.log("Ocurrio un error: ", error)});
+    cargarRows(0, 0, 0);
+  }).catch((error) => {
+    console.log("Ocurrio un error: ", error)});
   cargarRows(0, 0, 0);
 }
 
