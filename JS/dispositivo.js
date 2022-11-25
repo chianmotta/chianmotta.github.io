@@ -160,7 +160,9 @@ async function eliminarDispositivo(id) {
     cancelButtonText: "Cancelar",
     confirmButtonText: "Si, Eliminar!",
   }).then(async (result) => {
-    await fetch(
+
+    if (result.isConfirmed) {
+          await fetch(
       "https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/" +
         id,
       {
@@ -175,14 +177,14 @@ async function eliminarDispositivo(id) {
         Authorization: "Bearer " + token,
       },
     });
-    if (result.isConfirmed) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Eliminado con éxito",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+    
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Eliminado con éxito",
+      showConfirmButton: false,
+      timer: 1500,
+    });
       listar(0, 0, -1);
     }
   });

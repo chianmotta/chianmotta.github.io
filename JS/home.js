@@ -33,7 +33,11 @@ if (
       sessionStorage.setItem("institucion", params.get("institucion"));
       sessionStorage.setItem("ultimoanio", params.get("ultimoanio"));
       alert("Usuario no habilitado para el modulo ahorro de energia.");
-      window.location.href = "home_sugerencias.html";
+      console.log(params.get("ultimoanio").value);
+      window.location.href =
+        params.get("ultimoanio") == "no"
+          ? "accesoDenegado.html"
+          : "home_sugerencias.html";
     } else {
       sessionStorage.setItem("usuario", params.get("usuario"));
       sessionStorage.setItem("categoria", params.get("categoria"));
@@ -47,4 +51,3 @@ if (
     )} - ${params.get("institucion")}`;
   }
 }
-

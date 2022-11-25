@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manzana Isaac - Acciones</title>
+  <link  rel="icon"   href="img/logo.png" type="image/png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link rel="stylesheet" href="Style/style.css">
@@ -139,6 +140,8 @@
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalPorDia" style=>Agregar Acción</button>
 
         <p></p>
+      <div class="scrollbar scrollbar-success">
+        <div class="force-overflow">      
         <hr style="color:grey;" />
         <table class="table table-hover">
           <thead>
@@ -272,8 +275,8 @@
   </div>
   </div>
 
-  <div class="modal fade" id="ModalPorDia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog " style="background-color: #DADED3">
+  <div class="modal fade " id="ModalPorDia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar acción</h1>
@@ -291,11 +294,7 @@
 
               </select>
             </div>
-        </div class="mb-3">
 
-
-        <div class="modal-body">
-          <form>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Seleccione el AccionAplicar:</label>
 
@@ -305,10 +304,7 @@
 
               </select>
             </div>
-        </div class="mb-3">
 
-        <div class="modal-body">
-          <form>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Seleccione la prioridad:</label>
 
@@ -319,10 +315,7 @@
 
               </select>
             </div>
-        </div class="mb-3">
 
-        <div class="modal-body">
-          <form>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Seleccione el dispositivo:</label>
 
@@ -330,7 +323,6 @@
 
               </select>
             </div>
-        </div class="mb-3">
 
 
         <div class="modal-footer">

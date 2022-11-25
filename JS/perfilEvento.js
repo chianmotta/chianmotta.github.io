@@ -72,20 +72,48 @@ function pintarBoton(num) {
   document.getElementById(botonA).checked = true;
 }
 async function eliminarPerfilEvento(fecha, planta) {
-  fecha = fecha.substring(0, 10);
+  Swal.fire({
+    title: "¿Está seguro, que desea eliminar este perfil por evento?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#1B9752",
+    cancelButtonColor: "#d33",
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Si, Eliminar!",
+  })
+    .then(async (result) => {
+     
+      if (result.isConfirmed) {
+        fecha = fecha.substring(0, 10);
 
-  await fetch(
-    "https://ahorro-energetico-api-pereven.herokuapp.com/api/eventos?fecha=" +
-      fecha +
-      "&planta=" +
-      planta +
-      "&institucion=" +
-      institucionGlobal,
-    {
-      method: "DELETE",
-    }
-  );
-  listar();
+        await fetch(
+          "https://ahorro-energetico-api-pereven.herokuapp.com/api/eventos?fecha=" +
+            fecha +
+            "&planta=" +
+            planta +
+            "&institucion=" +
+            institucionGlobal,
+          {
+            method: "DELETE",
+          }
+        );
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Eliminado con éxito",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        listar();
+      }
+      listar();
+    })
+
+
+
+
+
 }
 
 function cargarPlantas(select, combo) {
@@ -101,10 +129,7 @@ function editar(planta, fecha, horaDesde, horaHasta, activado) {
   botonActivadoEditar = activado;
   pintarBoton(activado);
   editarPlanta = document.getElementById("editarPlanta").value = planta;
-  editarFecha = document.getElementById("editarFecha").value = fecha.substring(
-    0,
-    10
-  );
+  editarFecha = document.getElementById("editarFecha").value = fecha.substring(0, 10);
   document.getElementById("horaInicialEditar").value = horaDesde;
   document.getElementById("horaLimiteEditar").value = horaHasta;
 }
@@ -112,9 +137,11 @@ function editar(planta, fecha, horaDesde, horaHasta, activado) {
 async function editarPerfilEvento() {
   const editarHoraDesde = document.getElementById("horaInicialEditar").value;
   const editarHoraHasta = document.getElementById("horaLimiteEditar").value;
+
   if (editarHoraDesde >= editarHoraHasta) {
     alert("La hora inicio no debe ser mayor a la hora limite");
-  } else {
+  } 
+  else {
     await fetch(
       "https://ahorro-energetico-api-pereven.herokuapp.com/api/eventos/?dia=" +
         editarFecha +
@@ -137,6 +164,13 @@ async function editarPerfilEvento() {
         }),
       }
     );
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Actualizado con éxito',
+      showConfirmButton: false,
+      timer: 1500,
+    })
     listar();
   }
 }
@@ -156,10 +190,23 @@ async function agregarPerfilEvento() {
     horaLimite == undefined ||
     horaLimite == ""
   ) {
-    alert("Los campos no pueden estar vacios");
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'Los campos no pueden estar vacios.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })  
   } else {
     if (horaInicial >= horaLimite) {
-      alert("La hora inicio no debe ser mayor a la hora limite");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de ingreso de datos!',
+        text: 'La hora inicio no debe ser mayor a la hora limite.',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#1B9752',
+      })  
     } else {
       const data = {
         fecha: fecha,
@@ -179,7 +226,14 @@ async function agregarPerfilEvento() {
           },
           body: JSON.stringify(data),
         }
-      );
+      );    
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: "Agregado con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       listar();
     }
   }

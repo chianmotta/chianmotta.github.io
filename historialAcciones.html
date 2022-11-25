@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manzana Isaac - Historial de acciones</title>
+  <link  rel="icon"   href="img/logo.png" type="image/png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
   <link rel="stylesheet" href="Style/style.css">
@@ -114,55 +115,48 @@
       <h1>Registro de Operaciones</h1>
       <hr style="color:grey;" />
       <p></p>
-
-      <label for="exampleFormControlInput1" class="form-label">Buscar operación por horario      |         </label>      
-      <label for="appt-time">Horario inicial: </label>
-      <input id="appt-time_inicial" type="time" name="appt-time" />        
-      <label for="appt-time">Horario limite: </label>
-      <input  id="appt-time_limite" type="time" name="appt-time" />   
-
-      <p></p>
     
       <label for="exampleFormControlInput1" class="form-label">Buscar operación por fecha |</label>
       <label for="start">Fecha Inicio :</label>
       <input type="Date" name="fecha_inicio" id="fecha_inicio" >
-      <input type="Date" name="fecha_fin" id="fecha_fin" >
-    
+      <!--<input type="Date" name="fecha_fin" id="fecha_fin" > -->
+      <input class="form-check-input" type="checkbox" value="F" id="flexCheckDefault">
+      <label class="form-check-label" for="flexCheckDefault">Habilitar</label>
       <p></p>
 
       <button button onclick="Buscar()" type="button" class="btn btn-success" >Buscar</button>
 
-      <p></p>
-      <hr style="color:grey;" />
-      <h2>Operaciones</h2>
-      <hr/>      
-        <table class="table table-bordered table-striped" >      
-        <thead>
-          <tr>          
-            <th scope="col">ID</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Acción</th>
-            <th scope="col">Objetivo</th>
-            <th scope="col">Tipo de dato</th>
-            <th scope="col">Valor</th>
-            <th scope="col">Dispositivo</th>
-            <th scope="col">Planta</th>
-            <th scope="col">Aula</th>              
-          </tr>
-        </thead>
+      <br></br>
+      <h2>Historial</h2>
+      <div class="scrollbar scrollbar-success">
+        <div class="force-overflow">      
+         <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Acción</th>
+              <th scope="col">Objetivo</th>
+              <th scope="col">Tipo de dato</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Dispositivo</th>
+              <th scope="col">Planta</th>
+              <th scope="col">Aula</th>          
+            </tr>
+          </thead>
+          <tbody class="table-group" , id="Registros"></tbody>
+        </table></div>
+      </div>
 
-        <tbody id="Escritura" class="tabla"></tbody>
-        
-      </table>
-
-
-  
+    </div>
+    
     </div> <!--/div CONTAINER-->
 </div> <!--/div MENU-->
 </div>   <!--/div MENU-->
 
 <!--MODALES -->
 
+<script src="./package/dist/sweetalert2.all.js"></script>
+<script src="./package/dist/sweetalert2.all.min.js"></script>
 <script src="./JS/logOperaciones.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </body>

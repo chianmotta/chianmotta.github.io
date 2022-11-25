@@ -101,8 +101,7 @@ async function AceptarRecomendacion(id, descID, recomendacion) {
     showConfirmButton: false,
     timer: 1500,
   });
-  await delay(1.5);
-  ActualizarPagina();
+  Listar();
 }
 
 async function RechazarRecomendacion(id) {
@@ -114,27 +113,27 @@ async function RechazarRecomendacion(id) {
     confirmButtonColor: "#1B9752",
     cancelButtonColor: "#d33",
     cancelButtonText: "Cancelar",
-    confirmButtonText: "Si, Eliminar!",
+    confirmButtonText: "Si, Rechazar!",
   }).then(async (result) => {
-    await fetch(
-      "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion=" +
-        institucionGlobal +
-        "&id=" +
-        id,
-      {
-        method: "DELETE",
-      }
-    );
+ 
     if (result.isConfirmed) {
+      await fetch(
+        "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/?institucion=" +
+          institucionGlobal +
+          "&id=" +
+          id,
+        {
+          method: "DELETE",
+        }
+      );
       Swal.fire({
         position: "top-center",
         icon: "success",
-        title: "Eliminado con éxito",
+        title: "Rechazado con éxito",
         showConfirmButton: false,
         timer: 1500,
       });
-      await delay(1.5);
-      ActualizarPagina();
+      Listar();
     }
   });
 }
@@ -158,12 +157,4 @@ async function Listar() {
                           `;
       }
     });
-}
-function delay(n) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, n * 1000);
-  });
-}
-function ActualizarPagina() {
-  location.reload();
 }

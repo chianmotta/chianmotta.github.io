@@ -139,37 +139,7 @@ async function guardarDispositivoRoto() {
     cancelButtonText: "Cancelar",
     confirmButtonText: "Si, Agregar!",
   }).then(async (result) => {
-    //me pide guardar la descID(✓), planta(✓), institucion(X), aula(✓), nombre(✓), nombreAlumno(X)
-    var dispositivoID = document.getElementById("comboTipoDispositivo").value;
-    var planta = document.getElementById("editarPiso").value;
-
-    console.log(document.getElementById("editarZona"));
-
-    res = await fetch(
-      "https://ahorro-energetico-api-disps.herokuapp.com/api/dispositivos/get/" +
-        dispositivoID
-    );
-    data = await res.json();
-    const rp = {
-      descID: data[0].descID,
-      planta: planta,
-      aula: document.getElementById("editarZona").value,
-      nombre: data[0].nombre,
-      nombreAlumno: sessionStorage.getItem("usuario"),
-      institucion: institucionGlobal,
-    };
-
-    var sql =
-      "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion=la manzana de isaac";
-
-    await fetch(sql, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(rp),
-    });
-
+    
     if (result.isConfirmed) {
       Swal.fire({
         position: "center",

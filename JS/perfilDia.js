@@ -64,20 +64,46 @@ async function listar() {
 }
 
 async function eliminarPerfilDia(dia, planta) {
-  console.log(planta);
-  console.log(dia);
-  await fetch(
-    "https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/?dia=" +
-      dia +
-      "&planta=" +
-      planta +
-      "&institucion=" +
-      institucionGlobal,
-    {
-      method: "DELETE",
+
+  
+  Swal.fire({
+    title: "¿Está seguro, que desea eliminar esta meta?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#1B9752",
+    cancelButtonColor: "#d33",
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Si, Eliminar!",
+  }).then(async (result) => {
+ 
+    if (result.isConfirmed) {
+      console.log(planta);
+      console.log(dia);
+      await fetch(
+        "https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/?dia=" +
+        dia +
+        "&planta=" +
+        planta +
+        "&institucion=" +
+        institucionGlobal,
+      {
+        method: "DELETE",
+      }
+    );
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Eliminado con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      listar();
     }
-  );
-  listar();
+  });
+
+
+
 }
 
 function cargarPlantas(select, combo) {
@@ -100,7 +126,14 @@ async function editarPerfilDia() {
   const editarHoraDesde = document.getElementById("editarHoraInicial").value;
   const editarHoraHasta = document.getElementById("editarHoraLimite").value;
   if (editarHoraDesde >= editarHoraHasta) {
-    alert("La hora inicio no debe ser mayor a la hora limite");
+    
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'La hora inicio no debe ser mayor a la hora limite.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })  
   } else {
     await fetch(
       "https://ahorro-energetico-api-perfdia.herokuapp.com/api/perfilxdia/?dia=" +
@@ -121,6 +154,14 @@ async function editarPerfilDia() {
         }),
       }
     );
+
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Modificado con éxito",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     listar();
   }
 }
@@ -141,10 +182,22 @@ async function agregarPerfilDia() {
     horaLimite == undefined ||
     horaLimite == ""
   ) {
-    alert("Los campos no pueden estar vacios");
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'Los campos no pueden estar vacios.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })  
   } else {
     if (horaInicial >= horaLimite) {
-      alert("La hora inicio no debe ser mayor a la hora limite");
+    Swal.fire({
+      icon: 'error',
+      title: 'Error de ingreso de datos!',
+      text: 'La hora inicio no debe ser mayor a la hora limite.',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#1B9752',
+    })  
     } else {
       const data = {
         dia: dia,
@@ -163,6 +216,13 @@ async function agregarPerfilDia() {
           body: JSON.stringify(data),
         }
       );
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Añadido con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       listar();
     }
   }

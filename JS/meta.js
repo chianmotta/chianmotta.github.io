@@ -73,13 +73,13 @@ async function eliminarMeta(id) {
     cancelButtonText: "Cancelar",
     confirmButtonText: "Si, Eliminar!",
   }).then(async (result) => {
-    await fetch(
-      "https://ahorro-energetico-api-meta.herokuapp.com/api/meta/?id=" + id,
-      {
-        method: "DELETE",
-      }
-    );
     if (result.isConfirmed) {
+      await fetch(
+        "https://ahorro-energetico-api-meta.herokuapp.com/api/meta/?id=" + id,
+        {
+          method: "DELETE",
+        }
+      );
       Swal.fire({
         position: "center",
         icon: "success",

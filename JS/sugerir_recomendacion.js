@@ -49,43 +49,44 @@ async function RealizarRecomendacion() {
     cancelButtonText: "Cancelar",
     confirmButtonText: "Si, Agregar!",
   }).then(async (result) => {
-    var recomendacion_sugerencia = document.getElementById(
-      "exampleFormControlTextarea"
-    ).value;
-    var tipo_dispositivo_sugerencia = document.getElementById(
-      "comboBoxDispositivo"
-    ).value;
-    var url =
-      "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" +
-      tipo_dispositivo_sugerencia;
-    if (
-      CondicionesDeAceptacionRecomendaciones(recomendacion_sugerencia) == false
-    ) {
-      return;
-    }
-    await fetch(url)
-      .then((res) => res.json())
-      .then(async (data) => {
-        var NuevaRecomendacionAlumnoJSON = {
-          descID: data[0].id,
-          recomendacion: recomendacion_sugerencia,
-          institucion: institucionGlobal,
-          nombreAlumno: usuarioGlobal,
-        };
-
-        JSONdata = JSON.stringify(NuevaRecomendacionAlumnoJSON);
-        await fetch(
-          "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSONdata,
-          }
-        );
-      });
+   
     if (result.isConfirmed) {
+      var recomendacion_sugerencia = document.getElementById(
+        "exampleFormControlTextarea"
+      ).value;
+      var tipo_dispositivo_sugerencia = document.getElementById(
+        "comboBoxDispositivo"
+      ).value;
+      var url =
+        "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/?descripcion=" +
+        tipo_dispositivo_sugerencia;
+      if (
+        CondicionesDeAceptacionRecomendaciones(recomendacion_sugerencia) == false
+      ) {
+        return;
+      }
+      await fetch(url)
+        .then((res) => res.json())
+        .then(async (data) => {
+          var NuevaRecomendacionAlumnoJSON = {
+            descID: data[0].id,
+            recomendacion: recomendacion_sugerencia,
+            institucion: institucionGlobal,
+            nombreAlumno: usuarioGlobal,
+          };
+  
+          JSONdata = JSON.stringify(NuevaRecomendacionAlumnoJSON);
+          await fetch(
+            "https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDisp/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSONdata,
+            }
+          );
+        });
       Swal.fire({
         position: "top-center",
         icon: "success",
@@ -93,8 +94,8 @@ async function RealizarRecomendacion() {
         showConfirmButton: false,
         timer: 1500,
       });
-      await delay(1.5);
-      ActualizarPagina();
+      document.getElementById("exampleFormControlTextarea").value = "";
+      Listar();
     }
   });
 }

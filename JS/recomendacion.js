@@ -61,9 +61,9 @@ async function EliminarAccion(id){
       cancelButtonText: "Cancelar",
       confirmButtonText: 'Si, Eliminar!'
     }).then(async (result) => {
-      await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/?id=" + id + "&institucion=La manzana de Isaac" ,{
-        method: 'DELETE'})
       if (result.isConfirmed) {
+        await fetch("https://ahorroenergetico-api-recomenda.herokuapp.com/api/recomendacion/?id=" + id + "&institucion=La manzana de Isaac" ,{
+          method: 'DELETE'})
         Swal.fire({
           position: 'center',
           icon: 'success',

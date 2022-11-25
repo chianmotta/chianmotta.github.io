@@ -60,25 +60,37 @@ async function eliminarDescripcion(id) {
     cancelButtonColor: "#d33",
     cancelButtonText: "Cancelar",
     confirmButtonText: "Si, Eliminar!",
-  }).then(async (result) => {
+  }).then(async result => {
+    if (result.isConfirmed) {
     await fetch(
       "https://ahorro-energetico-api-desc.herokuapp.com/api/descripciones/" +
         id,
       {
         method: "DELETE",
-      }
-    );
-
-    if (result.isConfirmed) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Eliminado con éxito",
-        showConfirmButton: false,
-      });
-      listar("");
+      }).then(async result => {
+        if (result.ok) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Eliminado con éxito',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al guardar',
+            text: 'Intente mas tarde',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#1B9752',
+          })
+        }
     }
-  });
+      )
+      listar("");
+  }
+}
+  )
 }
 
 function editar(id, descripcion) {
@@ -96,6 +108,7 @@ async function editarDescripcion() {
       text: "Ingrese la descripción.",
       confirmButtonText: "Aceptar",
       confirmButtonColor: "#1B9752",
+      timer: 1500,
     });
     return;
   } else {

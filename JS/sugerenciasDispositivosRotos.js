@@ -33,17 +33,44 @@ async function AceptarDispositivoRoto(idDispositivo, NombreDispositivo){
           "institucion": institucionGlobal
         }),
       })
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: "Agregado con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
       Listar();
 }
 
 async function RechazarDispositivoRoto(id){  
-  console.log(id);
+ Swal.fire({
+    title: "¿Está seguro, que desea rechazar esta sugerencia de dispostiivo roto?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#1B9752",
+    cancelButtonColor: "#d33",
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Si, Rechazar!",
+  }).then(async (result) => {
 
-  await fetch("https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion="+ institucionGlobal + "&id=" + id, {
-    method: 'DELETE'})
 
-  Listar();
+    if (result.isConfirmed) {
+      await fetch("https://ahorro-energetico-api-rec-alum.herokuapp.com/api/recomendacionAlumnos/recomendacionDispRoto/?institucion="+ institucionGlobal + "&id=" + id, {
+        method: 'DELETE'});
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: "Rechazado con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    Listar();
+  });
+
 }
 
 async function Listar() {

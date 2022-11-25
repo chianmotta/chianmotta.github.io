@@ -43,17 +43,37 @@ function listar() {
 }
 
 function EliminarAccion(Id) {
-  fetch(
-    " https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
-      Id,
-    {
-      method: "DELETE",
-    }
-  )
-    .then((res) => res.json())
-    .then((res) => {
+  Swal.fire({
+    title: "¿Está seguro, que desea eliminar esta notificación?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#1B9752",
+    cancelButtonColor: "#d33",
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Si, Eliminar!",
+  })
+    .then(async (result) => {
+     
+      if (result.isConfirmed) {
+        fetch(
+          " https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
+            Id,
+          {
+            method: "DELETE",
+          }
+        )
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Eliminado con éxito",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        listar();
+      }
       listar();
-    });
+    })
 }
 
 function editar(id, nombre, telefono, tipoEmergencia) {
@@ -64,6 +84,16 @@ function editar(id, nombre, telefono, tipoEmergencia) {
 }
 
 async function editarContacto() {
+  if (document.getElementById("telefono-modal").value == "" || document.getElementById("nombre-modal").value == "" || document.getElementById("notificacion-modal").value) {
+    Swal.fire({
+      icon: "error",
+      title: "Error de ingreso de datos!",
+      text: "No puede haber campos vacios.",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#1B9752",
+    });
+    return;
+  } 
   await fetch(
     "https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac&id=" +
       idEditar,
@@ -79,6 +109,13 @@ async function editarContacto() {
       }),
     }
   );
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title: "Actualizado con éxito",
+    showConfirmButton: false,
+    timer: 1500,
+  });
   listar("");
 }
 
@@ -87,7 +124,13 @@ async function agregarContactoNuevo() {
   var nombre = document.getElementById("agregar-nombre").value;
   var tipoEmergencia = document.getElementById("agregar-notificacion").value;
   if (telefono == "" || nombre == "") {
-    alert("Todos los campos son requerido");
+    Swal.fire({
+      icon: "error",
+      title: "Error de ingreso de datos!",
+      text: "No puede haber campos vacios.",
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: "#1B9752",
+    });
   } else {
     await fetch(
       "https://ahorro-energetico-api-telemerg.herokuapp.com/api/contactoEmergencia/?institucion=La manzana de isaac",
@@ -103,6 +146,13 @@ async function agregarContactoNuevo() {
         }),
       }
     );
+    Swal.fire({
+      position: "top-center",
+      icon: "success",
+      title: "Agregado con éxito",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     listar("");
   }
 }
